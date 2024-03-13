@@ -1,0 +1,9 @@
+node_modules/
+/build/
+/config/
+/dist/
+/*.js
+/src/pages/
+.eslintrc.cjs
+yarn.lock
+package-lock.json
