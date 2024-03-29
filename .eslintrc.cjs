@@ -48,6 +48,7 @@ module.exports = {
         vue: "never",
       },
     ],
+    "vue/multi-word-component-names": ["none"],
     "no-await-in-loop": "warn",
     "no-duplicate-imports": "error",
     "no-new-native-nonconstructor": "error",

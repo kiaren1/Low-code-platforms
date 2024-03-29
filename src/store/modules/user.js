@@ -3,12 +3,21 @@ export default {
     // 在这里定义应用的初始状态
     userData: {
       userId: '',
+      userName: '',
       nickName: '',
-      avatar: '', // 头像
-      background: '', // 背景图
     }
   },
   mutations: {
-
+    setUser(state, payload) {
+      state.userData = payload;
+    },
+    // 清除用户信息
+    clearUser(state) {
+      state.userData = {
+        userId: '',
+        userName: '',
+        nickName: '',
+      }
+    }
   }
 };

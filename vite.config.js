@@ -22,7 +22,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@utils': path.resolve(__dirname, './src/utils')
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@store': path.resolve(__dirname, './src/store/vuexStore'),
+      '@api': path.resolve(__dirname, './src/api'),
     }
   },
   server: {
@@ -35,10 +37,6 @@ export default defineConfig({
         target: 'http://localhost:8211',
         changeOrigin: true,
       },
-      '/mock': {
-        target: 'https://yapi.sankuai.com',
-        changeOrigin: true,
-      }
     }
   },
 })

@@ -6,9 +6,11 @@ export default createStore({
     user,
   },
   state: { // 存放数据，使用响应式包装
-
+    openLogin: false // 是否显示登录弹窗
   },
   mutations: { // 同步修改state内容
-
+    changeLoginWindowState(state, payload) {
+      state.openLogin = payload.openLogin;
+    }
   },
 })

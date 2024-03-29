@@ -2,6 +2,7 @@ import axios from 'axios';
 /* eslint-disable-next-line */
 import qs from 'qs';
 import { message } from 'ant-design-vue';
+import store from '../store/vuexStore';
 
 axios.defaults.withCredentials = true;
 
@@ -23,7 +24,7 @@ request.interceptors.request.use((config) => {
   // response 错误处理
   message.error({
     content: '请求异常',
-    duration: 4,
+    duration: 2,
   })
   return Promise.reject(error);
 });
@@ -33,11 +34,12 @@ request.interceptors.response.use((response) => {
   // 处理response data
   const res = response.data;
   if (res.code === undefined || res.code !== 200) {
-    res.msg = res.msg || res.message || res.errmsg;
+    res.msg = res.msg || res.message || res.errmsg || '服务异常';
     message.error({
       content: res.msg,
-      duration: 4,
+      duration: 2,
     })
+    if (res.code) handleResponseError(res.code);
     return Promise.reject(res);
   }
   return res.data !== undefined ? res.data : response;
@@ -49,5 +51,13 @@ request.interceptors.response.use((response) => {
   })
   return Promise.reject(error);
 });
+
+function handleResponseError(code) {
+  switch (code) {
+    case 102: // 未登录
+      store.commit('changeLoginWindowState', { openLogin: true });
+      break;
+  }
+}
 
 export default request;

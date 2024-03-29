@@ -119,6 +119,7 @@
 import { computed, ref, watch } from 'vue';
 import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
+import UserApi from '@api/userApi.js';
 
 const user = computed(() => store.state.user.userData);
 
@@ -140,7 +141,7 @@ const menuHorizontalItems = ref([
     icon: '#icon-rollback',
     show:  MENU_ITEM_STATE.SHOW,
     clicked: () => {
-
+      router.back();
     }
   },
   {
@@ -151,7 +152,7 @@ const menuHorizontalItems = ref([
     icon: '#icon-home',
     show:  MENU_ITEM_STATE.SHOW,
     clicked: () => {
-
+      router.push('/');
     }
   },
 ]);
@@ -169,41 +170,8 @@ const menuVerticalItems = ref([
       if(user.value.userId){
         alert('个人主页');
       }else{
-        router.push({path: '/login'});
+        store.commit('changeLoginWindowState', {openLogin: true});
       }
-    }
-  },
-  {
-    name: 'write',
-    key: 'write',
-    hint: '写博客',
-    color: '#3E644F',
-    icon: '#icon-bijijilu',
-    show:  MENU_ITEM_STATE.SHOW,
-    clicked: () => {
-
-    }
-  },
-  {
-    name: 'favorite',
-    key: 'favorite',
-    hint: '收藏夹',
-    color: '#C89838',
-    icon: '#icon-shoucangjia',
-    show:  MENU_ITEM_STATE.SHOW,
-    clicked: () => {
-
-    }
-  },
-  {
-    name: 'history',
-    key: 'history',
-    hint: '历史记录',
-    color: '#AEA6BB',
-    icon: '#icon-lishijilu',
-    show:  MENU_ITEM_STATE.SHOW,
-    clicked: () => {
-
     }
   },
   {
@@ -214,7 +182,7 @@ const menuVerticalItems = ref([
     icon: '#icon-tuichu',
     show:  user.value.userId ? MENU_ITEM_STATE.SHOW : MENU_ITEM_STATE.HIDE,
     clicked: () => {
-      
+      UserApi.logout();
     }
   }
 ]);

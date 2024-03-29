@@ -1,7 +1,7 @@
 <template>
   <div class="FSA-area" ref="fsa" @animationend="handleAnimationEnd">
     <article class="text">
-      <RotateCube></RotateCube>
+      <RotateCube size="200"></RotateCube>
       <div class="title">
         <h1>MK-blog</h1>
         <span>一款可私有化部署的博客</span>
