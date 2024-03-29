@@ -16,7 +16,9 @@ export default {
   },
   async switch() {
     const user = await request.get(APIS.Switch);
-    store.commit('setUser', user);
+    if (user) {
+      store.commit('setUser', user);
+    }
     return user;
   },
   async signup(username, password) {
