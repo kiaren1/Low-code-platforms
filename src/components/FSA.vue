@@ -3,21 +3,21 @@
     <article class="text">
       <RotateCube size="200"></RotateCube>
       <div class="title">
-        <h1>MK-blog</h1>
-        <span>一款可私有化部署的博客</span>
+        <h1>Momo低代码平台</h1>
+        <span>一款可视化前端编程平台</span>
       </div>
       <div class="hint">
         <span>Nightglow —— 夜气辉，一种光学现象，它使得在背向太阳的夜空即使在排除了星光和扩散的阳光也不会完全黑暗</span>
       </div>
     </article>
     <article class="author">
-      <section>By: Moming Kiaren</section>
+      <section>By: Moming(夏明宇)</section>
       <nav>
-        <a href="https://github.com/XiaMingYu77/Mk-markdown-blog" target="_blank">
+        <a href="https://github.com/XiaMingYu77/LowCodeWebPage" target="_blank">
           <svg class="icon" aria-hidden="true" font-size="25px">
             <use xlink:href="#icon-githublogo"></use>
           </svg>
-          Mk-markdown-blog
+          Momo-Lowcode
         </a>
       </nav>
     </article>
@@ -55,6 +55,8 @@ function handleAnimationEnd(){
   top: 0;
   bottom: 0;
   animation: fadeAway 1.5s ease-in 2.5s;
+
+  z-index: 9999;
 
   .text{
     position: absolute;

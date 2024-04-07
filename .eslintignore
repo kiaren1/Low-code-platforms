@@ -3,7 +3,6 @@ node_modules/
 /config/
 /dist/
 /*.js
-/src/pages/
 .eslintrc.cjs
 yarn.lock
 package-lock.json

@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 module.exports = {
   root: true,
   env: {
@@ -35,7 +34,7 @@ module.exports = {
     "$to": "readonly",
   },
   rules: {
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     'vue/html-indent': ['error', 2],
     // html 需要有结束标签，除了自闭合标签
     'vue/html-end-tags': 2,
@@ -48,7 +47,7 @@ module.exports = {
         vue: "never",
       },
     ],
-    "vue/multi-word-component-names": ["none"],
+    "vue/multi-word-component-names": "off",
     "no-await-in-loop": "warn",
     "no-duplicate-imports": "error",
     "no-new-native-nonconstructor": "error",

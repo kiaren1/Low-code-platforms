@@ -8,6 +8,8 @@ import 'normalize.css/normalize.css';
 import to from 'await-to-js';
 import store from './store/vuexStore.js'
 
+import { initComponent } from '@/custom-component' // 注册自定义组件
+
 import '@/styles/animate.scss'
 import '@/styles/reset.css'
 import '@/styles/global.scss'
@@ -16,7 +18,8 @@ import '@/styles/dark.scss'
 const app = createApp(App);
 app.use(Antd)
   .use(router)
-  .use(store)
+  .use(store);
+initComponent(app);
 app.mount('#app');
 
 // let [err, data] = await $to(Promise);

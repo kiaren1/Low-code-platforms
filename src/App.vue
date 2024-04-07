@@ -13,13 +13,13 @@ import LoginWindow from '@components/LoginWindow/index.vue'
 import { onMounted, ref } from 'vue';
 import Menu from '@components/MenuCircle.vue';
 import UserApi from '@api/userApi.js';
-const showFsa = ref(true);
+const showFsa = ref(false);
 
 function closeFsa(){
   showFsa.value = false;
 }
 
-onMounted(()=>{
+onMounted(() => {
   UserApi.switch();
 })
 

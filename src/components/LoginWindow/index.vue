@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model:open="openLogin" @cancel="handleCancel" :footer="null">
+  <a-modal v-model:open="openLogin" @cancel="handleCancel" :footer="null" >
     <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
     <article class="content">
       <section class="cube">
@@ -24,21 +24,21 @@ import Signup from './components/Signup.vue';
 import RotateCube from '@components/RotateCube.vue'
 import { UserOutlined, AppstoreAddOutlined } from '@ant-design/icons-vue';
 const store = useStore();
-const openLogin = computed(()=>store.state.openLogin);
+const openLogin = computed(() => store.state.openLogin);
 
 const current = ref(['login']);
 const items = ref([{
-    key: 'login',
-    icon: () => h(UserOutlined),
-    label: '登录',
-    title: '登录',
-  },
-  {
-    key: 'signup',
-    icon: () => h(AppstoreAddOutlined),
-    label: '注册',
-    title: '注册',
-  }]);
+  key: 'login',
+  icon: () => h(UserOutlined),
+  label: '登录',
+  title: '登录',
+},
+{
+  key: 'signup',
+  icon: () => h(AppstoreAddOutlined),
+  label: '注册',
+  title: '注册',
+}]);
 
 function handleCancel(){
   store.commit('changeLoginWindowState', {openLogin: false});

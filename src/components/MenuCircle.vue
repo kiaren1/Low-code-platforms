@@ -1,5 +1,5 @@
 <template>
-  <article class="menu">
+  <article class="menu" :class="isMenuRight ? 'right':'left'">
     <div class="main-icon menu-item">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-caidan"></use>
@@ -52,12 +52,18 @@
 </template>
 
 <style lang="less" scoped>
+.right{
+  right: 50px;
+}
+.left{
+  right: 320px;
+}
 .menu{
   position: fixed;
-  right: 50px;
-  top: 30px;
   margin: auto;
   z-index: 100;
+  top: 70px;
+  transition: all 0.3s ease-in-out;
   .main-icon{
     position: absolute;
     border-radius: 50%;
@@ -91,6 +97,10 @@
     position: absolute;
     right: 0;
     top: 60px;
+  }
+
+  :deep(.ant-btn-default){
+    border-color: transparent;
   }
 }
 .menu:hover{
@@ -130,6 +140,8 @@ const MENU_ITEM_STATE = {
   HIDE: 0, // 隐藏
   SHOW: 1, // 显示
 }
+
+const isMenuRight = computed(() => store.state.isMenuRight);
 
 // 横向列表
 const menuHorizontalItems = ref([
