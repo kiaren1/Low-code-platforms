@@ -26,7 +26,6 @@
     >
       <!-- 区分不同类型的组件进行渲染 -->
       <!-- SVG图 -->
-      <!-- {{ item.component }} -->
       <component
         :is="item.component"
         v-if="item.component.startsWith('SVG')"

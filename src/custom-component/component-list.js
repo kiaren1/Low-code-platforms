@@ -91,7 +91,7 @@ const list = [
     component: 'RectShape',
     label: '矩形',
     propValue: '&nbsp;',
-    icon: 'juxing',
+    icon: 'rectangle',
     style: {
       width: 200,
       height: 200,
@@ -113,7 +113,7 @@ const list = [
     component: 'LineShape',
     label: '直线',
     propValue: '',
-    icon: 'zhixian',
+    icon: 'line',
     style: {
       width: 200,
       height: 2,
@@ -124,7 +124,7 @@ const list = [
     component: 'CircleShape',
     label: '圆形',
     propValue: '&nbsp;',
-    icon: '24gl-circle',
+    icon: 'circle',
     style: {
       width: 200,
       height: 200,
@@ -212,7 +212,7 @@ const list = [
   {
     component: 'VChart',
     label: '图表',
-    icon: 'el-icon-data-analysis',
+    icon: 'tubiao-zhuzhuangtu',
     propValue: {
       chart: 'VChart',
       option: {

@@ -1,10 +1,10 @@
-import { deepCopy } from '@/utils/utils'
 import store from '@store'
 import { divide, multiply } from 'mathjs'
+import { cloneDeep } from 'lodash'
 
 const needToChangeAttrs = ['top', 'left', 'width', 'height', 'fontSize']
 export default function changeComponentsSizeWithScale(scale) {
-  const componentData = deepCopy(store.state.componentData)
+  const componentData = cloneDeep(store.state.componentData)
   componentData.forEach((component) => {
     Object.keys(component.style).forEach((key) => {
       if (needToChangeAttrs.includes(key)) {

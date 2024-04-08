@@ -4,8 +4,8 @@
     <main>
       <!-- 左侧组件列表 -->
       <section :class="leftList ? 'left active' : 'left inactive'">
-        <!-- <ComponentList />
-        <RealTimeComponentList /> -->
+        <ComponentList />
+        <!-- <RealTimeComponentList /> -->
       </section>
       <a-button
         title="show-list-btn"
@@ -63,6 +63,10 @@
 <script setup>
 import Editor from './components/Editor/index.vue';
 import Toolbar from "./components/Toolbar.vue";
+import ComponentList from './components/ComponentList.vue';
+import componentList from '@/custom-component/component-list'; // 左侧列表数据
+import generateID from '@/utils/generateID';
+import { changeComponentSizeWithScale } from '@/utils/changeComponentsSizeWithScale';
 import { useStore } from 'vuex';
 import { computed, onMounted, ref, watch } from "vue";
 import { listenGlobalKeyDown } from '@/utils/shortcutKey'
@@ -123,23 +127,23 @@ watch(rightList, (value) => {
 });
 
 function handleDrop(e) {
-  // e.preventDefault()
-  // e.stopPropagation()
+  e.preventDefault()
+  e.stopPropagation()
 
-  // const index = e.dataTransfer.getData('index');
-  // const rectInfo = editor.value.getBoundingClientRect();
-  // if (index) {
-  //   const component = cloneDeep(componentList[index]);
-  //   component.style.top = e.clientY - rectInfo.y;
-  //   component.style.left = e.clientX - rectInfo.x;
-  //   component.id = generateID();
+  const index = e.dataTransfer.getData('index');
+  const rectInfo = editor.value.getBoundingClientRect();
+  if (index) {
+    const component = cloneDeep(componentList[index]);
+    component.style.top = e.clientY - rectInfo.y;
+    component.style.left = e.clientX - rectInfo.x;
+    component.id = generateID();
 
-  //   // 根据画面比例修改组件样式比例
-  //   changeComponentSizeWithScale(component);
+    // 根据画面比例修改组件样式比例
+    changeComponentSizeWithScale(component);
 
-  //   store.commit('addComponent', { component });
-  //   store.commit('recordSnapshot');
-  // }
+    store.commit('addComponent', { component });
+    store.commit('recordSnapshot');
+  }
 }
 
 function  handleDragOver(e) {
