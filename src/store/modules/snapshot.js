@@ -22,9 +22,9 @@ export default {
       if (state.snapshotIndex >= 0) {
         state.snapshotIndex--
         const componentData = cloneDeep(state.snapshotData[state.snapshotIndex]) || getDefaultcomponentData()
-        if (state.curComponent) {
+        if (store.state.curComponent) {
           // 如果当前组件不在 componentData 中，则置空
-          const needClean = !componentData.find((component) => state.curComponent.id === component.id)
+          const needClean = !componentData.find((component) => store.state.curComponent.id === component.id)
 
           if (needClean) {
             store.commit('setCurComponent', {
@@ -48,7 +48,7 @@ export default {
 
     recordSnapshot(state) {
       // 添加新的快照
-      state.snapshotData[++state.snapshotIndex] = cloneDeep(state.componentData)
+      state.snapshotData[++state.snapshotIndex] = cloneDeep(store.state.componentData)
       // 在 undo 过程中，添加新的快照时，要将它后面的快照清理掉
       if (state.snapshotIndex < state.snapshotData.length - 1) {
         state.snapshotData = state.snapshotData.slice(0, state.snapshotIndex + 1)

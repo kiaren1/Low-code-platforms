@@ -9,7 +9,7 @@
   >
     <!-- tabindex >= 0 使得双击时聚焦该元素 -->
     <div
-      ref="text"
+      ref="textRef"
       :contenteditable="canEdit"
       :class="{ 'can-edit': canEdit }"
       tabindex="0"
@@ -59,7 +59,7 @@ const props = defineProps({
     default: () => {},
   },
 });
-const { propValue, request, element, linkage} = toRefs(props);
+const { request, element, linkage} = toRefs(props);
 useOnEvent(linkage, element, elRef);
 const emits = defineEmits(['input']);
 
@@ -157,6 +157,7 @@ function setEdit() {
 }
 
 function selectText(elementItem) {
+  console.log(elementItem);
   const selection = window.getSelection();
   const range = document.createRange();
   range.selectNodeContents(elementItem);

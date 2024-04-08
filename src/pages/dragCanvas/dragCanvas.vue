@@ -74,10 +74,16 @@ import {
 const store = useStore();
 
 const leftList = ref(true);
-const rightList = ref(true);
-const isDarkMode = computed(() => {
-  return store.state.isDarkMode;
-})
+const activeName = ref('attr');
+const reSelectAnimateIndex = ref(undefined);
+
+const isDarkMode = computed(() => store.state.isDarkMode);
+const componentData = computed(() => store.state.componentData);
+const curComponent = computed(() => store.state.curComponent);
+const isClickComponent = computed(() => store.state.isClickComponent);
+const canvasStyleData = computed(() => store.state.canvasStyleData);
+const editor = computed(() => store.state.compose.editor);
+const rightList = computed(() => store.state.rightList);
 
 onMounted(() => {
   restore()
@@ -116,8 +122,6 @@ watch(rightList, (value) => {
   store.commit('setMenuIsRight', !value);
 });
 
-// const editor = computed(() => store.state.editor);
-
 function handleDrop(e) {
   // e.preventDefault()
   // e.stopPropagation()
@@ -149,16 +153,16 @@ function  handleMouseDown(e) {
   store.commit('setInEditorStatus', true);
 }
 
-// 选中组件
+// 未选中组件时处理
 function deselectCurComponent(e) {
-  // if (!this.isClickComponent) {
-  //   store.commit('setCurComponent', { component: null, index: null })
-  // }
+  if (!isClickComponent.value) {
+    store.commit('setCurComponent', { component: null, index: null })
+  }
 
-  // // 0 左击 1 滚轮 2 右击
-  // if (e.button !== 2) {
-  //   store.commit('hideContextMenu')
-  // }
+  // 0 左击 1 滚轮 2 右击
+  if (e.button !== 2) {
+    store.commit('hideContextMenu')
+  }
 }
 
 </script>

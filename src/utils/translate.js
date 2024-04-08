@@ -119,7 +119,7 @@ export function cos(rotate) {
 }
 
 export function mod360(deg) {
-  return (deg + 360) % 360
+  return (deg + 360) % 360;
 }
 
 export function changeStyleWithScale(value) {

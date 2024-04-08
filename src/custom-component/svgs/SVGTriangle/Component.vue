@@ -37,7 +37,7 @@ const props = defineProps({
   },
 });
 
-const { propValue, linkage, element } = toRefs(props);
+const { linkage, element } = toRefs(props);
 
 const elRef = ref();
 useOnEvent(linkage, element, elRef);

@@ -3,13 +3,23 @@ import user from './modules/user.js';
 import animation from './modules/animation';
 import snapshot from './modules/snapshot.js';
 import compose from './modules/compose.js';
+import contextmenu from './modules/contextmenu.js';
+import copy from './modules/copy.js';
+import event from './modules/event.js';
+import layer from './modules/layer.js';
+import lock from './modules/lock.js';
 
 export default createStore({
   modules: {
     user,
     animation,
     snapshot,
-    compose
+    compose,
+    contextmenu,
+    copy,
+    event,
+    layer,
+    lock
   },
   state: { // 存放数据，使用响应式包装
     openLogin: false, // 是否显示登录弹窗
@@ -115,17 +125,17 @@ export default createStore({
     },
 
     deleteComponent(state, index) {
-      let compIndex = null;
-      if (index === undefined) {
+      let compIndex = index;
+      if (compIndex === undefined) {
         compIndex = state.curComponentIndex;
       }
 
-      if (index === state.curComponentIndex) {
+      if (compIndex === state.curComponentIndex) {
         state.curComponentIndex = null;
         state.curComponent = null;
       }
 
-      if (/\d/.test(index)) {
+      if (/\d/.test(compIndex)) {
         state.componentData.splice(compIndex, 1)
       }
     },

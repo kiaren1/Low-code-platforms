@@ -1,7 +1,7 @@
-import store from './index'
-import toast from '@/utils/toast'
-import generateID from '@/utils/generateID'
-import { deepCopy } from '@/utils/utils'
+import store from '../vuexStore';
+import { message } from 'ant-design-vue';
+import generateID from '@/utils/generateID';
+import { cloneDeep } from 'lodash';
 
 export default {
   state: {
@@ -10,8 +10,8 @@ export default {
   },
   mutations: {
     copy(state) {
-      if (!state.curComponent) {
-        toast('请选择组件')
+      if (!store.state.curComponent) {
+        message.error('请选择组件')
         return
       }
 
@@ -24,15 +24,15 @@ export default {
 
     paste(state, isMouse) {
       if (!state.copyData) {
-        toast('请选择组件')
+        message.error('请选择组件')
         return
       }
 
       const data = state.copyData.data
 
       if (isMouse) {
-        data.style.top = state.menuTop
-        data.style.left = state.menuLeft
+        data.style.top = store.state.contextmenu.menuTop
+        data.style.left = store.state.contextmenu.menuLeft
       } else {
         data.style.top += 10
         data.style.left += 10
@@ -45,8 +45,8 @@ export default {
     },
 
     cut(state) {
-      if (!state.curComponent) {
-        toast('请选择组件')
+      if (!store.state.curComponent) {
+        message.error('请选择组件')
         return
       }
 
@@ -63,25 +63,25 @@ export default {
 // 恢复上一次剪切的数据
 function restorePreCutData(state) {
   if (state.isCut && state.copyData) {
-    const data = deepCopy(state.copyData.data)
-    const index = state.copyData.index
-    store.commit('addComponent', { component: data, index })
-    if (state.curComponentIndex >= index) {
+    const data = cloneDeep(state.copyData.data);
+    const index = state.copyData.index;
+    store.commit('addComponent', { component: data, index });
+    if (store.state.curComponentIndex >= index) {
       // 如果当前组件索引大于等于插入索引，需要加一，因为当前组件往后移了一位
-      state.curComponentIndex++
+      store.state.curComponentIndex++;
     }
   }
 }
 
 function copyData(state) {
   state.copyData = {
-    data: deepCopy(state.curComponent),
-    index: state.curComponentIndex,
+    data: cloneDeep(store.state.curComponent),
+    index: store.state.curComponentIndex,
   }
 }
 
 function deepCopyHelper(data) {
-  const result = deepCopy(data)
+  const result = cloneDeep(data)
   result.id = generateID()
   if (result.component === 'Group') {
     result.propValue.forEach((component, i) => {

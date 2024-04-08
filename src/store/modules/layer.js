@@ -1,51 +1,52 @@
 import { swap } from '@/utils/utils'
-import toast from '@/utils/toast'
+import { message } from 'ant-design-vue';
+import store from '../vuexStore';
 
 export default {
   mutations: {
-    upComponent(state) {
-      const { componentData, curComponentIndex } = state
+    upComponent() {
+      const { componentData, curComponentIndex } = store.state;
       // 上移图层 index，表示元素在数组中越往后
       if (curComponentIndex < componentData.length - 1) {
-        swap(componentData, curComponentIndex, curComponentIndex + 1)
-        state.curComponentIndex = curComponentIndex + 1
+        swap(componentData, curComponentIndex, curComponentIndex + 1);
+        store.state.curComponentIndex = curComponentIndex + 1;
       } else {
-        toast('已经到顶了')
+        message.info('已经到顶了');
       }
     },
 
-    downComponent(state) {
-      const { componentData, curComponentIndex } = state
+    downComponent() {
+      const { componentData, curComponentIndex } = store.state;
       // 下移图层 index，表示元素在数组中越往前
       if (curComponentIndex > 0) {
-        swap(componentData, curComponentIndex, curComponentIndex - 1)
-        state.curComponentIndex = curComponentIndex - 1
+        swap(componentData, curComponentIndex, curComponentIndex - 1);
+        store.state.curComponentIndex = curComponentIndex - 1;
       } else {
-        toast('已经到底了')
+        message.info('已经到底了');
       }
     },
 
-    topComponent(state) {
-      const { componentData, curComponentIndex, curComponent } = state
+    topComponent() {
+      const { componentData, curComponentIndex, curComponent } = store.state;
       // 置顶
       if (curComponentIndex < componentData.length - 1) {
-        componentData.splice(curComponentIndex, 1)
-        componentData.push(curComponent)
-        state.curComponentIndex = componentData.length - 1
+        componentData.splice(curComponentIndex, 1);
+        componentData.push(curComponent);
+        store.state.curComponentIndex = componentData.length - 1;
       } else {
-        toast('已经到顶了')
+        message.info('已经到顶了');
       }
     },
 
-    bottomComponent(state) {
-      const { componentData, curComponentIndex, curComponent } = state
+    bottomComponent() {
+      const { componentData, curComponentIndex, curComponent } = store.state;
       // 置底
       if (curComponentIndex > 0) {
-        componentData.splice(curComponentIndex, 1)
-        componentData.unshift(curComponent)
-        state.curComponentIndex = 0
+        componentData.splice(curComponentIndex, 1);
+        componentData.unshift(curComponent);
+        store.state.curComponentIndex = 0;
       } else {
-        toast('已经到底了')
+        message.info('已经到底了');
       }
     },
   },
