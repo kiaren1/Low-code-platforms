@@ -40,7 +40,9 @@ const props = defineProps({
 const { linkage, element } = toRefs(props);
 
 const elRef = ref();
-useOnEvent(linkage, element, elRef);
+onMounted(() => {
+  useOnEvent(linkage.value, element.value, elRef.value);
+})
 
 const points = ref('');
 

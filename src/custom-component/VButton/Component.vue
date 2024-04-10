@@ -1,23 +1,31 @@
 <template>
-    <button class="v-button">{{ propValue }}</button>
+  <button class="v-button" ref="elRef">{{ propValue }}</button>
 </template>
 
-<script>
-import OnEvent from '../common/OnEvent'
+<script setup>
+import { useOnEvent } from '../common/onEvent.js';
+import { toRefs, onMounted, ref } from 'vue';
 
-export default {
-    extends: OnEvent,
-    props: {
-        propValue: {
-            type: String,
-            default: '',
-        },
-        element: {
-            type: Object,
-            default: () => {},
-        },
-    },
-}
+const elRef = ref();
+const props = defineProps({
+  propValue: {
+    type: Object,
+    required: true,
+    default: () => {},
+  },
+  element: {
+    type: Object,
+    default: () => {},
+  },
+  linkage: {
+    type: Object,
+    default: () => {},
+  },
+});
+const { element, linkage} = toRefs(props);
+onMounted(() => {
+  useOnEvent(linkage.value, element.value, elRef.value);
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 import { onMounted, onUnmounted } from 'vue';
 import eventBus from '@utils/eventBus';
-export function useOnEvent(linkage, element, elRef) {
+export function useOnEvent(linkage, element, el) {
 
   onMounted(() => {
     if (linkage?.data?.length) {
@@ -10,7 +10,7 @@ export function useOnEvent(linkage, element, elRef) {
 
     const { data, duration } = linkage || {};
     if (data?.length) {
-      elRef.value.style.transition = `all ${duration}s`;
+      el.style.transition = `all ${duration}s`;
     }
   });
   onUnmounted(() => {

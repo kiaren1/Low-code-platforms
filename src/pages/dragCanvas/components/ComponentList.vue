@@ -23,7 +23,6 @@
 import componentList from '@/custom-component/component-list'
 
 function handleDragStart(e) {
-  console.log(123);
   e.dataTransfer.setData('index', e.target.dataset.index);
 }
 </script>

@@ -1,13 +1,9 @@
 <template>
-    <div class="attr-list">
-        <CommonAttr></CommonAttr>
-    </div>
+  <div class="attr-list">
+    <CommonAttr></CommonAttr>
+  </div>
 </template>
 
-<script>
+<script setup>
 import CommonAttr from '@/custom-component/common/CommonAttr.vue'
-
-export default {
-    components: { CommonAttr },
-}
 </script>

@@ -1,26 +1,26 @@
 <template>
-    <div class="attr-list">
-        <CommonAttr></CommonAttr>
-        <el-form>
-            <el-form-item label="镜像翻转">
-                <div style="clear: both;">
-                    <el-checkbox v-model="curComponent.propValue.flip.horizontal" label="horizontal">水平翻转</el-checkbox>
-                    <el-checkbox v-model="curComponent.propValue.flip.vertical" label="vertical">垂直翻转</el-checkbox>
-                </div>
-            </el-form-item>
-        </el-form>
-    </div>
+  <div class="attr-list">
+    <CommonAttr></CommonAttr>
+    <a-form>
+      <a-form-item label="镜像翻转">
+        <div style="clear: both;">
+          <a-checkbox v-model="curComponent.propValue.flip.horizontal">水平翻转</a-checkbox>
+          <a-checkbox v-model="curComponent.propValue.flip.vertical">垂直翻转</a-checkbox>
+        </div>
+      </a-form-item>
+      <a-form-item label="更改图片">
+        <div style="clear: both;">
+
+        </div>
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 
-<script>
+<script setup>
 import CommonAttr from '@/custom-component/common/CommonAttr.vue'
-
-export default {
-    components: { CommonAttr },
-    computed: {
-        curComponent() {
-            return this.$store.state.curComponent
-        },
-    },
-}
+import { useStore } from 'vuex';
+import { computed } from 'vue';
+const store = useStore();
+const curComponent = computed(() => store.state.curComponent);
 </script>

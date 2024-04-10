@@ -75,7 +75,7 @@ const list = [
     label: '图片',
     icon: 'tupian',
     propValue: {
-      url: '@/assets/title.jpg',
+      url: '/title.jpg',
       flip: {
         horizontal: false,
         vertical: false,

@@ -6,10 +6,10 @@
     @click="selectCurComponent"
     @mousedown="handleMouseDownOnShape"
   >
-    <SyncOutlined v-show="isActive()" @mousedown="handleRotate" class="icon-xuanzhuan" />
+    <SyncOutlined v-show="isActive" @mousedown="handleRotate" class="icon-xuanzhuan" />
     <span v-show="element.isLock" class="iconfont icon-suo"></span>
     <div
-      v-for="item in (isActive()? getPointList() : [])"
+      v-for="item in (isActive? cmp_PointList : [])"
       :key="item"
       class="shape-point"
       :style="getPointStyle(item)"
@@ -83,6 +83,14 @@ const angleToCursor = ref([ // 每个范围的角度对应的光标
 ])
 const cursors = ref({});
 
+const cmp_PointList = computed(() => {
+  console.log('cmp_PointList', element.value.component);
+  return element.value.component === 'LineShape' ? pointList2.value : pointList.value;
+});
+const isActive = computed(() => {
+  return active.value && !element.value.isLock;
+})
+
 onMounted(() => {
   // 用于 Group 组件
   if (curComponent.value) {
@@ -97,14 +105,6 @@ onMounted(() => {
     elRef.value.classList.remove('animated', 'infinite');
   })
 })
-
-function isActive() {
-  return active.value && !element.value.isLock;
-}
-
-function getPointList() {
-  return element.value.component === 'line-shape' ? pointList2.value : pointList.value;
-}
 
 // 处理旋转
 function handleRotate(e) {

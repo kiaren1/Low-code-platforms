@@ -60,13 +60,15 @@ const props = defineProps({
   },
 });
 const { request, element, linkage} = toRefs(props);
-useOnEvent(linkage, element, elRef);
+onMounted(() => {
+  useOnEvent(linkage.value, element.value, elRef.value);
+})
 const emits = defineEmits(['input']);
 
 const canEdit = ref(false);
 const ctrlKey = ref(17);
 const isCtrlDown = ref(false);
-const cancelRequest = ref(null);
+let cancelRequest = null;
 
 const editMode = computed(() => store.state.editMode);
 const curComponent = computed(() => store.state.curComponent);
@@ -76,7 +78,7 @@ onMounted(() => {
   // 如果要在修改接口属性的同时发请求，需要 watch 一下 request 的属性
   if (request.value) {
     // 第二个参数是要修改数据的父对象，第三个参数是修改数据的 key，第四个数据修改数据的类型
-    cancelRequest.value = requestWarpper(request.value, element.value, 'propValue', 'string');
+    cancelRequest = requestWarpper(request.value, element.value, 'propValue', 'string');
   }
   eventBus.on('componentClick', onComponentClick);
 });
