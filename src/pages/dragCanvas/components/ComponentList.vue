@@ -7,20 +7,24 @@
       :draggable="true"
       :data-index="index"
     >
-      <svg class="icon" aria-hidden="true" v-if="item.icon.substr(0,2) === 'el'">
+      <svg class="icon" aria-hidden="true" v-if="item.icon.substr(0,2) === 'el'" :style="{color: isDarkMode?'#ddd':'#606266'}">
         <use :xlink:href="`#item.icon`"></use>
       </svg>
-      <svg class="icon" aria-hidden="true" v-else>
+      <svg class="icon" aria-hidden="true" v-else :style="{color: isDarkMode?'#ddd':'#606266'}">
         <use :xlink:href="`#icon-${item.icon}`"></use>
       </svg>
-      <!-- <span v-if="item.icon.substr(0,2) === 'el'" :class="item.icon"></span>
-      <span v-else class="iconfont" :class="'icon-' + item.icon"></span> -->
     </div>
   </div>
 </template>
 
 <script setup>
+import { useStore } from 'vuex';
 import componentList from '@/custom-component/component-list'
+import { computed } from 'vue';
+
+const store = useStore();
+
+const isDarkMode = computed(() => store.state.isDarkMode);
 
 function handleDragStart(e) {
   e.dataTransfer.setData('index', e.target.dataset.index);
@@ -56,7 +60,7 @@ function handleDragStart(e) {
 
     .icon {
       margin-right: 4px;
-      font-size: 20px;
+      font-size: 23px;
     }
   }
 }

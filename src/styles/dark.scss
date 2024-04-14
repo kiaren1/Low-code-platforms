@@ -1,12 +1,11 @@
 .home.dark,
-.dark ~ .el-color-picker__panel,
-.dark ~ .el-select-dropdown {
+.dark ~ .ant-select-dropdown {
     --main-bg-color: #2e2e2e;
     --secondary-bg-color: #000;
     --button-text-color: #fff;
     --text-color: #fff;
     --border-color: #161616b8;
-    --placeholder-text-color: #fff;
+    --placeholder-text-color: #a7a7a7;
     --placeholder-bg-color: #242424;
     --actived-text-color: #fff;
     --actived-bg-color: #409eff;

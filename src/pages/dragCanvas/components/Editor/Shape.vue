@@ -84,7 +84,6 @@ const angleToCursor = ref([ // 每个范围的角度对应的光标
 const cursors = ref({});
 
 const cmp_PointList = computed(() => {
-  console.log('cmp_PointList', element.value.component);
   return element.value.component === 'LineShape' ? pointList2.value : pointList.value;
 });
 const isActive = computed(() => {

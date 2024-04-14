@@ -1,11 +1,11 @@
 <template>
   <div class="attr-list">
     <CommonAttr></CommonAttr>
-    <el-form>
-      <el-form-item label="内容">
-        <el-input v-model="curComponent.propValue" type="textarea" :rows="3" />
-      </el-form-item>
-    </el-form>
+    <a-form>
+      <a-form-item label="内容">
+        <a-input v-model:value="curComponent.propValue" type="textarea" :rows="3" />
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 

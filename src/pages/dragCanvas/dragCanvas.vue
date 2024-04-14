@@ -5,7 +5,7 @@
       <!-- 左侧组件列表 -->
       <section :class="leftList ? 'left active' : 'left inactive'">
         <ComponentList />
-        <!-- <RealTimeComponentList /> -->
+        <RealTimeComponentList />
       </section>
       <a-button
         title="show-list-btn"
@@ -33,18 +33,18 @@
 
       <!-- 右侧属性列表 -->
       <section :class="rightList ? 'right active' : 'right inactive'">
-        <!-- <el-tabs v-if="curComponent" v-model="activeName">
-          <el-tab-pane label="属性" name="attr">
+        <a-tabs v-if="curComponent" v-model="activeName">
+          <a-tab-pane tab="属性" key="attr">
             <component :is="curComponent.component + 'Attr'" />
-          </el-tab-pane>
-          <el-tab-pane label="动画" name="animation" style="padding-top: 20px;">
-            <AnimationList />
-          </el-tab-pane>
-          <el-tab-pane label="事件" name="events" style="padding-top: 20px;">
-            <EventList />
-          </el-tab-pane>
-        </el-tabs>
-        <CanvasAttr v-else></CanvasAttr> -->
+          </a-tab-pane>
+          <a-tab-pane tab="动画" key="animation" style="padding-top: 20px;">
+            <!-- <AnimationList /> -->
+          </a-tab-pane>
+          <a-tab-pane tab="事件" key="events" style="padding-top: 20px;">
+            <!-- <EventList /> -->
+          </a-tab-pane>
+        </a-tabs>
+        <CanvasAttr v-else></CanvasAttr>
       </section>
       <a-button
         title="show-list-btn"
@@ -65,6 +65,8 @@ import Editor from './components/Editor/index.vue';
 import Toolbar from "./components/Toolbar.vue";
 import ComponentList from './components/ComponentList.vue';
 import componentList from '@/custom-component/component-list'; // 左侧列表数据
+import RealTimeComponentList from './components/RealTimeComponentList.vue';
+import CanvasAttr from './components/CanvasAttr.vue';
 import generateID from '@/utils/generateID';
 import { changeComponentSizeWithScale } from '@/utils/changeComponentsSizeWithScale';
 import { useStore } from 'vuex';
@@ -218,6 +220,10 @@ function deselectCurComponent(e) {
       background: var(--main-bg-color);
       color: var(--text-color);
     }
+    .right {
+      padding: 0 15px;
+      overflow: scroll;
+    }
 
     .left {
       width: 200px;
@@ -285,28 +291,59 @@ function deselectCurComponent(e) {
       .el-select {
         width: 100%;
       }
-
-      .el-form-item__label {
+      .ant-form{
+        transition: all .3s;
         color: var(--text-color);
       }
-
-      .el-tabs__item.is-top {
+      .ant-form-item{
+        transition: all .3s;
         color: var(--text-color);
-
-        &.is-active {
-          color: var(--actived-text-color);
+      }
+      .ant-form-item-label {
+        label{
+          transition: all .3s;
+          color: var(--text-color);
         }
       }
 
-      .el-input__inner {
+      .ant-tabs-nav {
+        color: var(--text-color);
+
+        &.ant-tabs-tab-active {
+          color: var(--actived-text-color);
+        }
+      }
+      .ant-input-group-addon, .ant-input-number-group-addon{
+        transition: all .3s;
+        background-color: #F5F7FA;
+      }
+      .ant-input {
+        transition: all .3s;
         background-color: var(--placeholder-bg-color);
         color: var(--text-color);
         border-color: var(--border-color);
+
+        &::placeholder{
+          color: var(--placeholder-text-color);
+        }
       }
 
       textarea.el-textarea__inner {
         background-color: var(--placeholder-bg-color);
         color: var(--text-color);
+      }
+
+      .ant-select{
+        .ant-select-selector{
+          background-color: var(--placeholder-bg-color);
+          color: var(--text-color) !important;
+          .ant-select-selection-item{
+            color: var(--text-color) !important;
+          }
+        }
+        .ant-select-arrow{
+          color: var(--placeholder-text-color);
+        }
       }
 
       .el-select-dropdown__item {
@@ -354,28 +391,29 @@ function deselectCurComponent(e) {
   }
 
   .placeholder {
-      text-align: center;
-      color: var(--placeholder-text-color);
+    text-align: center;
+    color: var(--placeholder-text-color);
   }
 
   .global-attr {
     padding: 10px;
   }
 
-  .el-collapse {
+  .ant-collapse {
     border-color: var(--border-color);
   }
 
-  .el-collapse-item__header,
-  .el-collapse-item__wrap {
+  .ant-collapse-header,
+  .ant-collapse-content-box {
+    transition: all .3s;
     border-color: var(--border-color);
     background-color: var(--main-bg-color);
-    color: var(--text-color);
+    color: var(--text-color) !important;
   }
 
-  .el-collapse-item__header.is-active {
-    border-bottom-color: transparent !important;
-  }
+  //.ant-collapse-header.is-active {
+  //  border-bottom-color: transparent !important;
+  //}
 
   .el-tabs__item {
     color: var(--text-color);

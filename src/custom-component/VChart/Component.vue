@@ -50,17 +50,6 @@ use([
   BarChart,
   LineChart,
 ]);
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.contentBoxSize) {
-      chart.value.resize();
-    }
-  }
-});
-onMounted(() => {
-  resizeObserver.observe(elRef.value);
-})
 </script>
 
 <style scoped>

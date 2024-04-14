@@ -14,9 +14,9 @@ export const commonAttr = {
     duration: 0, // 过渡持续时间
     data: [ // 组件联动
       {
-        id: '', // 联动的组件 id
-        label: '', // 联动的组件名称
-        event: '', // 监听事件
+        id: undefined, // 联动的组件 id
+        label: undefined, // 联动的组件名称
+        event: undefined, // 监听事件
         style: [{ key: '', value: '' }], // 监听的事件触发时，需要改变的属性
       },
     ],
@@ -36,7 +36,7 @@ const list = [
       url: '',
       series: false, // 是否定时发送请求
       time: 1000, // 定时更新时间
-      paramType: '', // string object array
+      paramType: 'object', // string object array
       requestCount: 0, // 请求次数限制，0 为无限
     },
     style: {
@@ -196,7 +196,7 @@ const list = [
       url: '',
       series: false,
       time: 1000,
-      paramType: '', // string object array
+      paramType: 'object', // string object array
       requestCount: 0, // 请求次数限制，0 为无限
     },
     style: {

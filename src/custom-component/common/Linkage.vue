@@ -1,71 +1,78 @@
 <template>
-  <el-collapse-item title="组件联动（预览生效）" name="linkage" class="linkage-container">
-    <el-form>
+  <div class="linkage-container">
+    <a-form layout="vertical">
       <div v-for="(item, index) in linkage.data" :key="index" class="linkage-component">
         <div class="div-guanbi" @click="deleteLinkageData(index)">
-          <span class="iconfont icon-guanbi"></span>
+          <CloseCircleOutlined />
         </div>
-        <el-select v-model="item.id" placeholder="请选择联动组件" class="testtest">
-          <el-option
+        <a-select v-model:value="item.id" placeholder="请选择联动组件" style="margin-top:10px; width: 100%">
+          <a-select-option 
             v-for="(component, i) in componentData"
             :key="component.id"
             :value="component.id"
-            :label="component.label"
           >
             <div @mouseenter="onEnter(i)" @mouseout="onOut(i)">{{ component.label }}</div>
-          </el-option>
-        </el-select>
-        <el-select v-model="item.event" placeholder="请选择监听事件">
-          <el-option
+          </a-select-option>
+        </a-select>
+        <a-select v-model:value="item.event" placeholder="请选择监听事件" style="margin-top:10px; width: 100%">
+          <a-select-option
             v-for="e in eventOptions"
             :key="e.value"
             :value="e.value"
-            :label="e.label"
-          ></el-option>
-        </el-select>
-        <p>事件触发时，当前组件要修改的属性</p>
-        <div v-for="(e, i) in item.style" :key="i" class="attr-container">
-          <el-select v-model="e.key" @change="e.value = ''">
-            <el-option
-              v-for="attr in Object.keys(curComponent.style)"
-              :key="attr"
-              :value="attr"
-              :label="styleMap[attr]"
-            ></el-option>
-          </el-select>
-          <el-color-picker v-if="isIncludesColor(e.key)" v-model="e.value" show-alpha></el-color-picker>
-          <el-select v-else-if="selectKey.includes(e.key)" v-model="e.value">
-            <el-option
-              v-for="option in optionMap[e.key]"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value"
-            ></el-option>
-          </el-select>
-          <el-input
-            v-else
-            v-model.number="e.value"
-            type="number"
-            placeholder="请输入"
-          />
-          <span class="iconfont icon-shanchu" @click="deleteData(item.style, i)"></span>
+          >
+            {{ e.label }}
+          </a-select-option>
+        </a-select>
+        <div class="change-attr">
+          <p>事件触发时，要修改的属性</p>
+          <div v-for="(e, i) in item.style" :key="i" class="attr-container">
+            <a-select v-model:value="e.key" @change="e.value = ''">
+              <a-select-option
+                v-for="attr in Object.keys(curComponent.style)"
+                :key="attr"
+                :value="attr"
+              >
+                {{ styleMap[attr] }}
+              </a-select-option>
+            </a-select>
+            <pick-colors v-if="isIncludesColor(e.key)" v-model:value="e.value" show-alpha :theme="isDarkMode ? 'dark': 'light'"/>
+            <a-select v-else-if="selectKey.includes(e.key)" v-model="e.value">
+              <a-select-option
+                v-for="option in optionMap[e.key]"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </a-select-option>
+            </a-select>
+            <a-input
+              v-else
+              v-model.number="e.value"
+              type="number"
+              placeholder="请输入"
+            />
+            <span class="iconfont icon-shanchu" @click="deleteData(item.style, i)"></span>
+          </div>
+          <a-button @click="addAttr(item.style)">添加属性</a-button>
         </div>
-        <el-button @click="addAttr(item.style)">添加属性</el-button>
       </div>
-      <el-button style="margin-bottom: 10px;" @click="addComponent">添加组件</el-button>
+      <a-button style="margin-bottom: 10px;" @click="addComponent">添加组件</a-button>
       <p>过渡时间（秒）</p>
-      <el-input v-model="linkage.duration" class="input-duration" placeholder="请输入"></el-input>
-    </el-form>
-  </el-collapse-item>
+      <a-input v-model="linkage.duration" class="input-duration" placeholder="请输入"></a-input>
+    </a-form>
+  </div>
 </template>
 
 <script setup>
 import { styleMap, optionMap, selectKey } from '@/utils/attr';
 import { reactive, ref, computed } from 'vue';
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
+import { CloseCircleOutlined } from '@ant-design/icons-vue';
+import PickColors from 'vue-pick-colors';
 
 const store = useStore();
 
+const isDarkMode = computed(() => store.state.isDarkMode);
 const curComponent = computed(() => store.state.curComponent);
 const linkage = computed(() => store.state.curComponent.linkage);
 const componentData = computed(() => store.state.componentData);
@@ -127,18 +134,16 @@ function deleteLinkageData(index) {
       cursor: pointer;
       position: absolute;
       right: 10px;
-      top: 3px;
-      color: #888;
-      border: 1px solid #ddd;
-      border-radius: 50%;
+      top: 5px;
       width: 18px;
       height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
 
-      .iconfont {
-        font-size: 12px;
+      .anticon {
+        color: var(--text-color);
+        font-size: 18px;
       }
     }
   }
@@ -147,22 +152,25 @@ function deleteLinkageData(index) {
     margin-bottom: 10px;
   }
 
-  .attr-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px 0;
+  .change-attr{
+    margin-top: 10px;
+    .attr-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
 
-    .el-select {
-      margin-bottom: 0;
-    }
+      .el-select {
+        margin-bottom: 0;
+      }
 
-    & > div {
-      width: 97px;
-    }
+      & > div {
+        width: 97px;
+      }
 
-    .icon-shanchu {
-      cursor: pointer;
+      .icon-shanchu {
+        cursor: pointer;
+      }
     }
   }
 }

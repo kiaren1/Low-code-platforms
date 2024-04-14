@@ -1,141 +1,138 @@
 <template>
-    <div class="ace">
-        <div class="header">
-            <el-button
-                class="btn"
-                icon="el-icon-search"
-                @click="openSearchBox"
-            >
-                查找
-            </el-button>
-            <el-button
-                class="btn"
-                icon="el-icon-close"
-                @click="closeEditor"
-            >
-                关闭
-            </el-button>
-        </div>
-        <div class="ace-editor">
-            <div ref="ace" class="editor" />
-        </div>
-        <div class="footer">
-            <el-button
-                type="primary"
-                @click="setCode"
-            >
-                重置代码
-            </el-button>
-            <el-button
-                type="success"
-                @click="getCode"
-            >
-                保存提交
-            </el-button>
-        </div>
+  <div class="ace">
+    <div class="header">
+      <a-space>
+        <a-button
+          class="btn"
+          :icon="h(SearchOutlined)"
+          @click="openSearchBox"
+        >
+          查找
+        </a-button>
+        <a-button
+          class="btn"
+          :icon="h(CloseOutlined)"
+          @click="closeEditor"
+        >
+          关闭
+        </a-button>
+      </a-space>
     </div>
+    <div class="ace-editor">
+      <div ref="aceRef" class="editor" />
+    </div>
+    <div class="footer">
+      <a-button
+        type="primary"
+        @click="setCode"
+      >
+        重置代码
+      </a-button>
+      <a-button
+        type="success"
+        @click="getCode"
+      >
+        保存提交
+      </a-button>
+    </div>
+  </div>
 </template>
 
-<script>
+<script setup>
 import ace from 'ace-builds'
 import 'ace-builds/src-min-noconflict/theme-one_dark'
 import 'ace-builds/src-min-noconflict/ext-searchbox'
 import 'ace-builds/src-min-noconflict/mode-json5'
 import 'ace-builds/src-min-noconflict/ext-language_tools'
-import { mapState } from 'vuex'
+import { useStore } from 'vuex';
+import { computed, onMounted, ref, watch, h } from 'vue';
+import { SearchOutlined, CloseOutlined} from '@ant-design/icons-vue';
 
-export default {
-    name: 'AceEditor',
-    data() {
-        return {
-            editor: null,
-            obj: null,
-        }
-    },
-    computed: mapState([
-        'canvasStyleData',
-        'curComponent',
-    ]),
-    watch: {
-        curComponent() {
-            this.setCode()
-        },
-        canvasStyleData() {
-            this.setCode()
-        },
-    },
-    mounted() {
-        ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/')
-        this.editor = ace.edit(this.$refs.ace, {
-            maxLines: 40,
-            minLines: 40,
-            fontSize: 14,
-            theme: 'ace/theme/one_dark',
-            mode: 'ace/mode/json5',
-            tabSize: 4,
-            readOnly: false,
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-        })
+const store = useStore();
 
-        this.obj = this.curComponent || this.canvasStyleData
-        this.editor.setValue(JSON.stringify(this.obj, null, 4))
-    },
-    methods: {
-        setCode() {
-            this.obj = this.curComponent || this.canvasStyleData
-            this.editor.setValue(JSON.stringify(this.obj, null, 4))
-        },
+const canvasStyleData = computed(() => store.state.canvasStyleData);
+const curComponent = computed(() => store.state.curComponent);
+const editor = ref(null);
+const obj = ref(null);
 
-        getCode() {
-            let str = this.editor.getValue()
-            if (!this.curComponent) {
-                this.$store.commit('aceSetCanvasData', JSON.parse(str))
-            } else {
-                this.$store.commit('aceSetcurComponent', JSON.parse(str))
-            }
-        },
+const aceRef = ref();
 
-        updateEditorTheme(theme) {
-            this.editor.setTheme(theme)
-        },
+const emits = defineEmits(['closeEditor']);
 
-        openSearchBox() {
-            this.editor.execCommand('find')
-        },
+watch([curComponent, canvasStyleData], () => {
+  setCode();
+})
 
-        closeEditor() {
-            this.$emit('closeEditor')
-        },
-    },
+onMounted(() => {
+  ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/')
+  editor.value = ace.edit(aceRef.value, {
+    maxLines: 40,
+    minLines: 40,
+    fontSize: 14,
+    theme: 'ace/theme/one_dark',
+    mode: 'ace/mode/json5',
+    tabSize: 4,
+    readOnly: false,
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    enableSnippets: true,
+  })
+
+  obj.value = curComponent.value || canvasStyleData.value;
+  editor.value.setValue(JSON.stringify(obj.value, null, 4));
+});
+
+function setCode() {
+  obj.value = curComponent.value || canvasStyleData.value;
+  editor.value.setValue(JSON.stringify(obj.value, null, 4));
+}
+
+function getCode() {
+  const str = editor.value.getValue();
+  if (!curComponent.value) {
+    store.commit('aceSetCanvasData', JSON.parse(str));
+  } else {
+    store.commit('aceSetcurComponent', JSON.parse(str));
+  }
+}
+
+function updateEditorTheme(theme) {
+  editor.value.setTheme(theme);
+}
+
+function openSearchBox() {
+  editor.value.execCommand('find');
+}
+
+function closeEditor() {
+  emits('closeEditor');
 }
 </script>
 
 <style lang="scss" scoped>
 .ace {
-    position: absolute;
+  position: absolute;
+  height: calc(100% - 80px);
+  width: 550px;
+  top: 63px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  z-index: 100;
+  padding: 10px;
+
+  .header,
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .ace-editor {
     height: calc(100% - 80px);
-    width: 550px;
-    top: 63px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    z-index: 100;
-    padding: 10px;
-
-    .header,
-    .footer {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .ace-editor {
-        height: calc(100% - 80px);
-        overflow: auto;
-    }
+    overflow: auto;
+  }
 }
 
 .editor {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 </style>

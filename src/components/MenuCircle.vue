@@ -1,9 +1,11 @@
 <template>
   <article class="menu" :class="isMenuRight ? 'right':'left'">
-    <div class="main-icon menu-item">
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-caidan"></use>
-      </svg>
+    <div class="main-icon">
+      <div class="content menu-item">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-caidan"></use>
+        </svg>
+      </div>
     </div>
     <div class="menu-horizontal">
       <a-button
@@ -66,12 +68,15 @@
   transition: all 0.3s ease-in-out;
   .main-icon{
     position: absolute;
-    border-radius: 50%;
-    background-color: #E0C068;
     z-index: 100;
     right: 0;
     top: 0;
-    box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
+
+    .content{
+      border-radius: 50%;
+      background-color: #E0C068;
+      box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
+    }
   }
   .menu-item{
     height: 60px;
@@ -108,8 +113,13 @@
     box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
   }
   .main-icon{
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
-    transform: translate(3px, 2px);
+    .content{
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+      transform: translate(3px, 2px);
+    }
+  }
+  .menu-horizontal{
+    margin-right: -3px;
   }
   .item-horizontal{
     margin-right: 15px !important;

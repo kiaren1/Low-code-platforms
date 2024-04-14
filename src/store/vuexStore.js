@@ -100,9 +100,10 @@ export default createStore({
       state.curComponentIndex = index
     },
 
-    setShapeStyle({ curComponent }, { top, left, width, height, rotate }) {
-      if (top !== undefined) { curComponent.style.top = Math.round(top) }
-      if (left !== undefined) { curComponent.style.left = Math.round(left) }
+    setShapeStyle(state, { top, left, width, height, rotate }) {
+      const curComponent = state.curComponent;
+      if (top) { curComponent.style.top = Math.round(top) }
+      if (left) { curComponent.style.left = Math.round(left) }
       if (width) { curComponent.style.width = Math.round(width) }
       if (height) { curComponent.style.height = Math.round(height) }
       if (rotate) { curComponent.style.rotate = Math.round(rotate) }

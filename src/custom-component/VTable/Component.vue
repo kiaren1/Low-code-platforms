@@ -45,11 +45,11 @@ onMounted(() => {
   useOnEvent(linkage.value, element.value, elRef.value);
 });
 
-const cancelRequest = ref(null);
+let cancelRequest = null;
 
 onMounted(() => {
   if (requestWarpper) {
-    cancelRequest.value = requestWarpper(request.value, propValue.value, 'data');
+    cancelRequest = requestWarpper(request.value, propValue.value, 'data');
   }
 });
 onBeforeUnmount(() => {

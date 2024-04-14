@@ -83,13 +83,21 @@ import Area from './Area.vue';
 import MarkLine from './MarkLine.vue';
 import ContextMenu from './ContextMenu.vue';
 import { $, isPreventDrop } from '@/utils/utils'
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 import { changeStyleWithScale } from '@utils/translate';
 import eventBus from '@utils/eventBus.js'
 import { getStyle, getComponentRotatedStyle, getShapeStyle, getSVGStyle, getCanvasStyle } from '@utils/style';
 import { useStore } from 'vuex';
 
 const store = useStore();
+
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: true,
+  },
+});
+const { isEdit } = toRefs(props);
 
 const editorX = ref(0);
 const editorY = ref(0);

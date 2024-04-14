@@ -21,10 +21,9 @@
     overflow: hidden;
 
     .attr-list {
-        overflow: auto;
-        padding: 10px 14px;
-        padding-top: 0;
-        height: 100%;
+      overflow: auto;
+      padding-top: 0;
+      height: 100%;
     }
 
     .title {
@@ -132,24 +131,6 @@
             background: #00000069;
             box-shadow: #0000008f 0 0 12px 5px;
         }
-    }
-}
-
-.el-color-picker__panel {
-    background-color: var(--main-bg-color);
-    border-color: var(--border-color);
-
-    .el-color-dropdown__btn,
-    .el-input__inner {
-        background: var(--secondary-bg-color);
-        border: 1px solid var(--secondary-bg-color);
-        color: var(--button-text-color);
-    }
-
-    .el-color-dropdown__btn:hover {
-        background: var(--button-active-text-color);
-        border-color: var(--actived-bg-color);
-        color: var(--main-bg-color);
     }
 }
 

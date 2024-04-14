@@ -12,7 +12,7 @@
       ref="textRef"
       :contenteditable="canEdit"
       :class="{ 'can-edit': canEdit }"
-      tabindex="0"
+      tabindex="1"
       :style="{ verticalAlign: element.style.verticalAlign }"
       @dblclick="setEdit"
       @paste="clearStyle"
@@ -106,8 +106,6 @@ function  handleKeydown(e) {
     isCtrlDown.value = true;
   } else if (isCtrlDown.value && canEdit.value && keycodes.includes(e.keyCode)) {
     e.stopPropagation();
-  } else if (e.keyCode === 46) { // deleteKey
-    e.stopPropagation();
   }
 }
 
@@ -159,7 +157,6 @@ function setEdit() {
 }
 
 function selectText(elementItem) {
-  console.log(elementItem);
   const selection = window.getSelection();
   const range = document.createRange();
   range.selectNodeContents(elementItem);

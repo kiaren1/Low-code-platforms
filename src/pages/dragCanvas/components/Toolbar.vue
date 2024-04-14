@@ -53,8 +53,8 @@
     </div>
 
     <!-- 预览 -->
-    <!-- <Preview v-if="isShowPreview" :is-screenshot="isScreenshot" @close="handlePreviewChange" />
-    <AceEditor v-if="isShowAceEditor" @closeEditor="closeEditor" /> -->
+    <!-- <Preview v-if="isShowPreview" :is-screenshot="isScreenshot" @close="handlePreviewChange" />-->
+    <AceEditor v-if="isShowAceEditor" @closeEditor="closeEditor" />
 
     <a-modal v-model:open="isShowDialog" :title="isExport ? '导出数据' : '导入数据'" width="1000px">
       <a-textarea v-model:value="jsonData" placeholder="请输入 JSON 数据" allow-clear :rows="20" />
@@ -92,6 +92,7 @@ import {useStore} from 'vuex';
 import { toRefs, ref, watch } from "vue";
 import { UploadOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
+import AceEditor from './Editor/AceEditor.vue';
 const store = useStore();
 
 const { componentData, canvasStyleData, isDarkMode } = toRefs(store.state);
@@ -108,6 +109,9 @@ watch(isDarkMode, (newValue) => {
 
 function onAceEditorChange() {
   isShowAceEditor.value = !isShowAceEditor.value;
+}
+function closeEditor(){
+  isShowAceEditor.value = false;
 }
 function onImportJSON(){ // 导入
   jsonData.value = '';

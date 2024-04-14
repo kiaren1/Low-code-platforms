@@ -26,6 +26,20 @@ export default {
       }
     },
 
+    moveComponent(state, { curIndex, targetIndex }) {
+      const { componentData } = store.state;
+      if (targetIndex >= 0 && targetIndex < componentData.length) {
+        const temp = componentData.splice(curIndex, 1)[0];
+        componentData.splice(targetIndex, 0, temp);
+      }
+      else if (targetIndex < 0) {
+        message.info('已经到顶了');
+      }
+      else if (targetIndex >= componentData.length) {
+        message.info('已经到顶了');
+      }
+    },
+
     topComponent() {
       const { componentData, curComponentIndex, curComponent } = store.state;
       // 置顶
