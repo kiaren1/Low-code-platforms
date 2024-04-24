@@ -26,7 +26,7 @@
         <div class="change-attr">
           <p>事件触发时，要修改的属性</p>
           <div v-for="(e, i) in item.style" :key="i" class="attr-container">
-            <a-select v-model:value="e.key" @change="e.value = ''">
+            <a-select v-model:value="e.key" @change="e.value = ''" style="width:100px">
               <a-select-option
                 v-for="attr in Object.keys(curComponent.style)"
                 :key="attr"
@@ -36,7 +36,7 @@
               </a-select-option>
             </a-select>
             <pick-colors v-if="isIncludesColor(e.key)" v-model:value="e.value" show-alpha :theme="isDarkMode ? 'dark': 'light'"/>
-            <a-select v-else-if="selectKey.includes(e.key)" v-model="e.value">
+            <a-select v-else-if="selectKey.includes(e.key)" v-model="e.value" style="width:100px">
               <a-select-option
                 v-for="option in optionMap[e.key]"
                 :key="option.value"
@@ -45,20 +45,20 @@
                 {{ option.label }}
               </a-select-option>
             </a-select>
-            <a-input
+            <a-input-number
               v-else
-              v-model.number="e.value"
-              type="number"
+              v-model:value="e.value"
               placeholder="请输入"
+              style="width:100px"
             />
-            <span class="iconfont icon-shanchu" @click="deleteData(item.style, i)"></span>
+            <DeleteOutlined class="icon-shanchu" @click="deleteData(item.style, i)"></DeleteOutlined>
           </div>
           <a-button @click="addAttr(item.style)">添加属性</a-button>
         </div>
       </div>
       <a-button style="margin-bottom: 10px;" @click="addComponent">添加组件</a-button>
       <p>过渡时间（秒）</p>
-      <a-input v-model="linkage.duration" class="input-duration" placeholder="请输入"></a-input>
+      <a-input v-model:value="linkage.duration" class="input-duration" placeholder="请输入"></a-input>
     </a-form>
   </div>
 </template>
@@ -67,7 +67,7 @@
 import { styleMap, optionMap, selectKey } from '@/utils/attr';
 import { reactive, ref, computed } from 'vue';
 import { useStore } from 'vuex';
-import { CloseCircleOutlined } from '@ant-design/icons-vue';
+import { CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import PickColors from 'vue-pick-colors';
 
 const store = useStore();

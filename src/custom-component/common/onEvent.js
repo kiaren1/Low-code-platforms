@@ -15,8 +15,8 @@ export function useOnEvent(linkage, element, el) {
   });
   onUnmounted(() => {
     if (linkage?.data?.length) {
-      eventBus.$off('v-click', onClick);
-      eventBus.$off('v-hover', onHover);
+      eventBus.off('v-click', onClick);
+      eventBus.off('v-hover', onHover);
     }
   })
 

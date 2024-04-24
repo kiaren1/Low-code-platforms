@@ -1,10 +1,14 @@
+import store from '../vuexStore';
+
 export default {
   mutations: {
-    lock({ curComponent }) {
+    lock() {
+      const curComponent = store.state.curComponent;
       curComponent.isLock = true
     },
 
-    unlock({ curComponent }) {
+    unlock() {
+      const curComponent = store.state.curComponent;
       curComponent.isLock = false
     },
   },

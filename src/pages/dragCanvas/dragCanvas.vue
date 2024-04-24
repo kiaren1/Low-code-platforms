@@ -34,14 +34,14 @@
       <!-- 右侧属性列表 -->
       <section :class="rightList ? 'right active' : 'right inactive'">
         <a-tabs v-if="curComponent" v-model="activeName">
-          <a-tab-pane tab="属性" key="attr">
+          <a-tab-pane tab="属性" key="attr" style="margin-top:-12px">
             <component :is="curComponent.component + 'Attr'" />
           </a-tab-pane>
           <a-tab-pane tab="动画" key="animation" style="padding-top: 20px;">
-            <!-- <AnimationList /> -->
+            <AnimationList />
           </a-tab-pane>
           <a-tab-pane tab="事件" key="events" style="padding-top: 20px;">
-            <!-- <EventList /> -->
+            <EventList />
           </a-tab-pane>
         </a-tabs>
         <CanvasAttr v-else></CanvasAttr>
@@ -67,6 +67,8 @@ import ComponentList from './components/ComponentList.vue';
 import componentList from '@/custom-component/component-list'; // 左侧列表数据
 import RealTimeComponentList from './components/RealTimeComponentList.vue';
 import CanvasAttr from './components/CanvasAttr.vue';
+import AnimationList from './components/AnimationList.vue';
+import EventList from './components/EventList.vue';
 import generateID from '@/utils/generateID';
 import { changeComponentSizeWithScale } from '@/utils/changeComponentsSizeWithScale';
 import { useStore } from 'vuex';
@@ -107,7 +109,8 @@ function restore() {
   // 用保存的数据恢复画布
   console.log('restore');
   const JSONDATA = `[{"animations":[],"events":{},"groupStyle":{},"isLock":false,"collapseName":"style","linkage":{"duration":0,"data":[{"id":"","label":"","event":"","style":[{"key":"","value":""}]}]},"component":"SVGTriangle","label":"三角形","icon":"xingzhuang-sanjiaoxing","propValue":"","style":{"rotate":0,"opacity":1,"width":80,"height":80,"fontSize":"","fontWeight":400,"lineHeight":"","letterSpacing":0,"textAlign":"center","color":"","borderColor":"#000","backgroundColor":"rgba(255,255,255,1)","top":288,"left":578},"id":"VpbUirBrhzw6N0NeVdI_u"},{"animations":[],"events":{},"groupStyle":{},"isLock":false,"collapseName":"style","linkage":{"duration":0,"data":[{"id":"","label":"","event":"","style":[{"key":"","value":""}]}]},"component":"VText","label":"文字","propValue":"双击编辑文字","icon":"wenben","request":{"method":"GET","data":[],"url":"","series":false,"time":1000,"paramType":"","requestCount":0},"style":{"rotate":0,"opacity":1,"width":200,"height":28,"fontSize":"","fontWeight":400,"lineHeight":"","letterSpacing":0,"textAlign":"","color":"","top":235,"left":518},"id":"7KWIzsJKje2-_88kUp0cT"}]`
-  store.commit('setComponentData', JSON.parse(JSONDATA))
+  store.commit('setComponentData', JSON.parse(JSONDATA));
+  store.commit('recordSnapshot');
   // if (localStorage.getItem('canvasData')) {
   //   setDefaultcomponentData(JSON.parse(localStorage.getItem('canvasData')))
   //   store.commit('setComponentData', JSON.parse(localStorage.getItem('canvasData')))
@@ -221,8 +224,12 @@ function deselectCurComponent(e) {
       color: var(--text-color);
     }
     .right {
-      padding: 0 15px;
+      padding: 0 5px;
       overflow: scroll;
+
+      .ant-tabs-tabpane{
+        padding-top: 10px !important;
+      }
     }
 
     .left {
@@ -342,6 +349,9 @@ function deselectCurComponent(e) {
           }
         }
         .ant-select-arrow{
+          color: var(--placeholder-text-color);
+        }
+        .ant-select-selection-placeholder{
           color: var(--placeholder-text-color);
         }
       }

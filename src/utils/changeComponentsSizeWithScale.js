@@ -3,8 +3,8 @@ import { divide, multiply } from 'mathjs'
 import { cloneDeep } from 'lodash'
 
 const needToChangeAttrs = ['top', 'left', 'width', 'height', 'fontSize']
-export default function changeComponentsSizeWithScale(scale) {
-  const componentData = cloneDeep(store.state.componentData)
+export default function changeComponentsSizeWithScale(scale, preScale) {
+  const componentData = cloneDeep(store.state.componentData);
   componentData.forEach((component) => {
     Object.keys(component.style).forEach((key) => {
       if (needToChangeAttrs.includes(key)) {
@@ -12,7 +12,7 @@ export default function changeComponentsSizeWithScale(scale) {
 
         // 根据原来的比例获取样式原来的尺寸
         // 再用原来的尺寸 * 现在的比例得出新的尺寸
-        component.style[key] = format(getOriginStyle(component.style[key], store.state.canvasStyleData.scale), scale)
+        component.style[key] = format(getOriginStyle(component.style[key], preScale), scale);
       }
     })
   })

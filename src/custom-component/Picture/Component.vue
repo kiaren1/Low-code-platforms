@@ -32,26 +32,27 @@ onMounted(() => {
 const img = ref(null);
 const canvas = ref();
 const ctx = ref(null);
-const isFirst = ref(true);
+
+let preUrl = ''; // 记录前一段的url，用来判断url是否发生变化
 
 onMounted(() => {
   ctx.value = canvas.value.getContext('2d');
   drawImage();
 });
 
-watch([() => element.value.style.width, () => element.value.style.height], () => {
+watch([() => element.value.propValue.url, () => element.value.style.width, () => element.value.style.height], () => {
   drawImage();
 });
 watch([() => propValue.value.flip.vertical, () => propValue.value.flip.horizontal], () => {
   mirrorFlip();
-})
+});
 
 function drawImage(){
   const { width, height } = element.value.style;
   canvas.value.width = width;
   canvas.value.height = height;
-  if (isFirst.value) {
-    isFirst.value = false;
+  if (preUrl !== element.value.propValue.url) { // 如果url发生改变需要对画布重绘
+    preUrl = element.value.propValue.url;
     const imageElement = document.createElement('img');
     imageElement.src = propValue.value.url;
     imageElement.onload = () => {
@@ -75,7 +76,6 @@ function mirrorFlip() {
   ctx.value.translate(width / 2 - width * hvalue / 2, height / 2 - height * vValue / 2)
   // 对称镜像
   ctx.value.scale(hvalue, vValue);
-  console.log('2', img.value);
   ctx.value.drawImage(img.value, 0, 0, width, height);
   // 还原坐标点
   ctx.value.setTransform(1, 0, 0, 1, 0, 0);

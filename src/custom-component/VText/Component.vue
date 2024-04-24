@@ -20,7 +20,7 @@
       @blur="handleBlur"
       @input="handleInput"
       v-html="element.propValue"
-    ></div>
+    />
   </div>
   <div v-else class="v-text preview">
     <div :style="{ verticalAlign: element.style.verticalAlign }" v-html="element.propValue"></div>

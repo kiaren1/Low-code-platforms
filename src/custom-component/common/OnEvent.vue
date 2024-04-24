@@ -15,8 +15,8 @@ export default {
   },
   created() {
     if (this.linkage?.data?.length) {
-      eventBus.$on('v-click', this.onClick)
-      eventBus.$on('v-hover', this.onHover)
+      eventBus.on('v-click', this.onClick)
+      eventBus.on('v-hover', this.onHover)
     }
   },
   mounted() {
@@ -27,8 +27,8 @@ export default {
   },
   beforeUnmount() {
     if (this.linkage?.data?.length) {
-      eventBus.$off('v-click', this.onClick)
-      eventBus.$off('v-hover', this.onHover)
+      eventBus.off('v-click', this.onClick)
+      eventBus.off('v-hover', this.onHover)
     }
   },
   methods: {

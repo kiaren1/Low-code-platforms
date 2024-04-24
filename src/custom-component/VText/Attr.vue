@@ -3,7 +3,7 @@
     <CommonAttr></CommonAttr>
     <a-form>
       <a-form-item label="内容">
-        <a-input v-model:value="curComponent.propValue" type="textarea" :rows="3" />
+        <a-textarea v-model:value="curComponent.propValue" type="textarea" :auto-size="{ maxRows: 3 }" />
       </a-form-item>
     </a-form>
   </div>

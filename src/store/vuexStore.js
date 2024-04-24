@@ -23,7 +23,7 @@ export default createStore({
   },
   state: { // 存放数据，使用响应式包装
     openLogin: false, // 是否显示登录弹窗
-    isDarkMode: true, // 光/暗样式
+    isDarkMode: false, // 光/暗样式
     editMode: 'edit', // 编辑器模式 edit preview
     canvasStyleData: { // 页面全局数据
       width: 1200,

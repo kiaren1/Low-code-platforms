@@ -1,11 +1,20 @@
+import store from '../vuexStore';
+
 export default {
   mutations: {
-    addEvent({ curComponent }, { event, param }) {
-      curComponent.events[event] = param
+    addEvent(state, { event, param }) {
+      const curComponent = store.state.curComponent;
+      curComponent.events[event] = param;
     },
 
-    removeEvent({ curComponent }, event) {
-      delete curComponent.events[event]
+    removeEvent(state, event) {
+      const curComponent = store.state.curComponent;
+      delete curComponent.events[event];
     },
+
+    updateEvent(state, { event, param }) {
+      const curComponent = store.state.curComponent;
+      curComponent.events[event] = param;
+    }
   },
 }

@@ -1,71 +1,70 @@
 <template>
-    <div @click="onClick" @mouseenter="onMouseEnter">
-        <component
-            :is="config.component"
-            v-if="config.component.startsWith('SVG')"
-            ref="component"
-            class="component"
-            :style="getSVGStyle(config.style)"
-            :prop-value="config.propValue"
-            :element="config"
-            :request="config.request"
-            :linkage="config.linkage"
-        />
+  <div @click="onClick" @mouseenter="onMouseEnter">
+    <component
+      :is="config.component"
+      v-if="config.component.startsWith('SVG')"
+      ref="component"
+      class="component"
+      :style="getSVGStyle(config.style)"
+      :prop-value="config.propValue"
+      :element="config"
+      :request="config.request"
+      :linkage="config.linkage"
+    />
 
-        <component
-            :is="config.component"
-            v-else
-            ref="component"
-            class="component"
-            :style="getStyle(config.style)"
-            :prop-value="config.propValue"
-            :element="config"
-            :request="config.request"
-            :linkage="config.linkage"
-        />
-    </div>
+    <component
+      :is="config.component"
+      v-else
+      ref="component"
+      class="component"
+      :style="getStyle(config.style)"
+      :prop-value="config.propValue"
+      :element="config"
+      :request="config.request"
+      :linkage="config.linkage"
+    />
+  </div>
 </template>
 
-<script>
-import { getStyle, getSVGStyle } from '@/utils/style'
-import runAnimation from '@/utils/runAnimation'
-import { mixins } from '@/utils/events'
-import eventBus from '@/utils/eventBus'
+<script setup>
+import { getStyle, getSVGStyle } from '@/utils/style';
+import runAnimation from '@/utils/runAnimation';
+import { events } from '@/utils/events';
+import eventBus from '@/utils/eventBus';
+import { onMounted, ref, toRefs } from 'vue';
 
-export default {
-    mixins: [mixins],
-    props: {
-        config: {
-            type: Object,
-            required: true,
-            default: () => {},
-        },
-    },
-    mounted() {
-        runAnimation(this.$refs.component.$el, this.config.animations)
-    },
-    methods: {
-        getStyle,
-        getSVGStyle,
+const props = defineProps({
+  config: {
+    type: Object,
+    required: true,
+    default: () => {},
+  },
+});
+const { config } = toRefs(props);
 
-        onClick() {
-            const events = this.config.events
-            Object.keys(events).forEach(event => {
-                this[event](events[event])
-            })
+const component = ref();
 
-            eventBus.$emit('v-click', this.config.id)
-        },
+onMounted(() => {
+  runAnimation(component.value.$el, config.value.animations);
+});
 
-        onMouseEnter() {
-            eventBus.$emit('v-hover', this.config.id)
-        },
-    },
+function onClick() {
+  const configEvents = config.value.events;
+  Object.keys(configEvents).forEach((event) => {
+    events[event](configEvents[event]);
+  })
+
+  eventBus.emit('v-click', config.value.id);
 }
+
+function onMouseEnter() {
+  eventBus.emit('v-hover', config.value.id);
+}
+
 </script>
 
 <style lang="scss" scoped>
 .component {
-    position: absolute;
+  position: absolute;
 }
 </style>

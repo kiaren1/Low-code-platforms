@@ -156,11 +156,11 @@ function handleMouseDown(e) {
     }
   }
 
-  const up = () => {
+  const up = (upE) => {
     document.removeEventListener('mousemove', move)
     document.removeEventListener('mouseup', up)
 
-    if (e.clientX === startX && e.clientY === startY) {
+    if (upE.clientX === startX && upE.clientY === startY) {
       hideArea()
       return
     }
@@ -190,7 +190,8 @@ function hideArea() {
 
 function createGroup() {
   // 获取选中区域的组件数据
-  const areaData = getSelectArea()
+  const areaData = getSelectArea();
+  console.log('areaData', areaData);
   if (areaData.length <= 1) {
     hideArea()
     return
@@ -245,14 +246,15 @@ function createGroup() {
 function getSelectArea() {
   const result = []
   // 区域起点坐标
-  const { x, y } = start.value
+  const { x, y } = start.value;
   // 计算所有的组件数据，判断是否在选中区域内
   componentData.value.forEach((component) => {
     if (component.isLock) {return}
 
-    const { cleft, ctop, cwidth, cheight } = getComponentRotatedStyle(component.style)
-    if (x <= cleft && y <= ctop && (cleft + cwidth <= x + width.value) && (ctop + cheight <= y + height.value)) {
-      result.push(component)
+    const styleObj = getComponentRotatedStyle(component.style);
+    
+    if (x <= styleObj.left && y <= styleObj.top && (styleObj.left + styleObj.width <= x + width.value) && (styleObj.top + styleObj.height <= y + height.value)) {
+      result.push(component);
     }
   });
 

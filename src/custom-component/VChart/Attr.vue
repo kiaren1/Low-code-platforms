@@ -4,33 +4,33 @@
     <a-form>
       <a-form-item label="标题">
         <a-switch
-          v-model="option.title.show"
+          v-model:checked="option.title.show"
           active-text="显示标题"
         >
         </a-switch>
         <a-input
-          v-model="option.title.text"
+          v-model:value="option.title.text"
           placeholder="请输入内容"
         >
         </a-input>
       </a-form-item>
       <a-form-item label="工具提示">
         <a-switch
-          v-model="option.tooltip.show"
+          v-model:checked="option.tooltip.show"
           active-text="显示提示"
         >
         </a-switch>
       </a-form-item>
       <a-form-item label="图例">
         <a-switch
-          v-model="option.legend.show"
+          v-model:checked="option.legend.show"
           active-text="显示图例"
         >
         </a-switch>
       </a-form-item>
       <a-form-item label="横坐标">
         <a-switch
-          v-model="option.xAxis.show"
+          v-model:checked="option.xAxis.show"
           active-text="显示横坐标"
         >
         </a-switch>
@@ -39,7 +39,7 @@
         <a-dropdown>
           <span class="el-dropdown-link">
             更换图表类型<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
+          </span> 
           <template v-slot:dropdown>
             <a-dropdown-menu >
               <span v-for="(chart, index) in charts" :key="index" @click="selectchart(chart.title)">
@@ -54,9 +54,9 @@
       </a-form-item>
     </a-form>
 
-    <a-dialog
+    <a-modal 
+      v-model:open="dialogVisible"
       title="数据修改"
-      v-model:visible="dialogVisible"
       width="75%"
     >
       <div ref="aceRef" class="ace"></div>
@@ -65,7 +65,7 @@
           <a-button type="primary" @click="updatedata">更新数据</a-button>
         </span>
       </template>
-    </a-dialog>
+    </a-modal>
   </div>
 </template>
 
@@ -101,9 +101,9 @@ const editor = ref(null);
 const aceRef = ref();
 
 function openStaticWinbox() {
-  dialogVisible.value = !dialogVisible.value
+  dialogVisible.value = !dialogVisible.value;
   nextTick(() => {
-    ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/')
+    ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/');
     editor.value = ace.edit(aceRef.value, {
       maxLines: 28,
       minLines: 28,
@@ -147,8 +147,6 @@ function selectchart(chart) {
 
 <style>
 .ace {
-  margin: 5px;
-  margin-top: -20px;
   height: 600px;
   width: 100%;
 }

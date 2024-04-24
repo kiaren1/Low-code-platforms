@@ -28,7 +28,9 @@ export default {
       state.areaData = data
     },
 
-    compose({ componentData, areaData, editor }) {
+    compose({ areaData, editor }) {
+      const componentData = store.state.componentData;
+
       const components = []
       areaData.components.forEach((component) => {
         if (component.component !== 'Group') {
@@ -78,7 +80,8 @@ export default {
     },
 
     // 将已经放到 Group 组件数据删除，也就是在 componentData 中删除，因为它们已经从 componentData 挪到 Group 组件中了
-    batchDeleteComponent({ componentData }, deleteData) {
+    batchDeleteComponent(state, deleteData) {
+      const componentData = store.state.componentData;
       deleteData.forEach((component) => {
         for (let i = 0, len = componentData.length; i < len; i++) {
           if (component.id === componentData[i].id) {
@@ -89,7 +92,8 @@ export default {
       })
     },
 
-    decompose({ curComponent, editor }) {
+    decompose({ editor }) {
+      const curComponent = store.state.curComponent;
       const parentStyle = { ...curComponent.style }
       const components = curComponent.propValue
       const editorRect = editor.getBoundingClientRect()

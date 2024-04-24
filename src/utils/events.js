@@ -14,10 +14,6 @@ const events = {
   },
 }
 
-const mixins = {
-  methods: events,
-}
-
 const eventList = [
   {
     key: 'redirect',
@@ -34,7 +30,6 @@ const eventList = [
 ]
 
 export {
-  mixins,
   events,
   eventList,
 }

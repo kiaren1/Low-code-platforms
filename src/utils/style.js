@@ -82,6 +82,7 @@ export function getStyle(style, filter = []) {
 
 // 获取一个组件旋转 rotate 后的样式
 export function getComponentRotatedStyle(style) {
+
   const styleObj = { ...style };
   if (styleObj.rotate !== 0) {
     const newWidth = styleObj.width * cos(styleObj.rotate) + styleObj.height * sin(styleObj.rotate);

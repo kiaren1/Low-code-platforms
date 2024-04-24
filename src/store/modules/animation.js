@@ -1,14 +1,19 @@
+import store from '../vuexStore';
+
 export default {
   mutations: {
-    addAnimation({ curComponent }, animation) {
+    addAnimation(state, animation) {
+      const curComponent = store.state.curComponent;
       curComponent.animations.push(animation)
     },
 
-    removeAnimation({ curComponent }, index) {
+    removeAnimation(state, index) {
+      const curComponent = store.state.curComponent;
       curComponent.animations.splice(index, 1)
     },
 
-    alterAnimation({ curComponent }, { index, data = {} }) {
+    alterAnimation(state, { index, data = {} }) {
+      const curComponent = store.state.curComponent;
       if (typeof index === 'number') {
         const original = curComponent.animations[index]
         curComponent.animations[index] = { ...original, ...data }

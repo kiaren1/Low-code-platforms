@@ -15,7 +15,17 @@
           <svg class="icon" aria-hidden="true">
             <use :xlink:href="`#icon-${element.icon}`"></use>
           </svg>
-          <span>{{ element.label }}</span>
+          <div
+            :style="{flex: 1, textAlign: 'left', padding: '5px'}"
+            :contenteditable="canEdit"
+            @dblclick="setEdit"
+            @blur="handleBlur"
+            @paste="(event)=>clearStyle(event, element)"
+            @input="(event)=>handleInput(event, element)"
+            @mousedown="handleMousedown"
+            tabindex="1">
+            {{ element.label }}
+          </div>
           <div class="icon-container">
             <div class="content">
               <div class="icon-item" @click="upComponent(transformIndex(index))">
@@ -36,16 +46,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import Draggable from "vuedraggable";
 import { cloneDeep } from 'lodash';
 import { ArrowUpOutlined, ArrowDownOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import { insertTextAtCaret } from '@/utils/utils.js';
 
 const store = useStore();
 
 const componentData = computed(() => store.state.componentData);
 const curComponentIndex = computed(() => store.state.curComponentIndex);
+const canEdit = ref(false);
 
 const reverseDataList = computed(() => {
   const ansList = cloneDeep(componentData.value);
@@ -53,9 +65,11 @@ const reverseDataList = computed(() => {
   return ansList;
 })
 function onEnd(){
+  saveData();
+}
+function saveData(){
   const ansList = cloneDeep(reverseDataList.value);
   ansList.reverse();
-  console.log(ansList);
   store.commit('setComponentData', ansList);
 }
 
@@ -94,6 +108,40 @@ function downComponent(index) {
 function setCurComponent(index) {
   store.commit('setCurComponent', { component: componentData.value[index], index })
 }
+
+function setEdit(event){
+  canEdit.value = true;
+  selectText(event.target);
+}
+function selectText(elementItem) {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(elementItem);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+function handleBlur(){
+  canEdit.value = false;
+  saveData();
+}
+function handleInput(event, element) {
+  element.label = event.data;
+}
+function handleMousedown(e) {
+  if (canEdit.value) {
+    e.stopPropagation();
+  }
+}
+function clearStyle(e, element) {
+  e.preventDefault()
+  const clp = e.clipboardData
+  const text = clp.getData('text/plain') || ''
+  if (text !== '') {
+    insertTextAtCaret(text);
+  }
+  console.log(e.target.innerHTML);
+  element.label = e.target.innerHTML;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -123,10 +171,9 @@ function setCurComponent(index) {
         display: block;
       }
     }
-
     .icon {
       margin-bottom: 2px;
-      margin-right: 4px;
+      margin-right: 2px;
       font-size: 16px;
     }
 

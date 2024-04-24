@@ -1,3 +1,5 @@
+import * as imageConversion from 'image-conversion';
+
 export function swap(arr, i, j) {
   [arr[i], arr[j]] = [arr[j], arr[i]];
 }
@@ -24,4 +26,8 @@ export function insertTextAtCaret(text) {
   } else if (document.selection && document.selection.createRange) {
     document.selection.createRange().text = text
   }
+}
+
+export function compressImage(file) {
+  return imageConversion.compressAccurately(file, 80);
 }

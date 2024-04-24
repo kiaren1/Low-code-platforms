@@ -2,7 +2,7 @@
   <div class="v-common-attr">
     <a-collapse v-model:activeKey="activeName" accordion @change="onChange" :bordered="false" expandIconPosition="end">
       <a-collapse-panel header="通用样式" key="style">
-        <a-form layout="vertical">
+        <a-form :labelCol="{span: 8, offset: 0}">
           <a-form-item v-for="({ key, label }, index) in styleKeys" :key="index" :label="label">
             <pick-colors v-if="isIncludesColor(key)" v-model:value="curComponent.style[key]" show-alpha :theme="isDarkMode ? 'dark': 'light'"/>
             <a-select v-else-if="selectKey.includes(key)" v-model:value="curComponent.style[key]">
@@ -41,7 +41,7 @@ const store = useStore();
 const curComponent = computed(() => store.state.curComponent);
 const isDarkMode = computed(() => store.state.isDarkMode);
 
-const activeName = ref('linkage');
+const activeName = ref('');
 
 const styleKeys = computed(() => {
   if (curComponent.value) {
@@ -53,11 +53,11 @@ const styleKeys = computed(() => {
 });
 
 onMounted(() => {
-  // activeName.value = curComponent.value.collapseName;
+  activeName.value = curComponent.value.collapseName;
 })
 
 watch(curComponent, () => {
-  // activeName.value = curComponent.value.collapseName;
+  activeName.value = curComponent.value.collapseName;
 });
 
 function onChange() {
