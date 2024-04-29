@@ -67,7 +67,9 @@ watch(open, (newValue) => {
   }
 });
 watch(open, () => {
-  refreash();
+  if(open.value === true){
+    refreash();
+  }
 })
 
 onMounted(() => {

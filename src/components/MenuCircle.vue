@@ -1,5 +1,5 @@
 <template>
-  <article class="menu" :class="isMenuRight ? 'right':'left'">
+  <article class="menu" :class="menuClass">
     <div class="main-icon">
       <div class="content menu-item">
         <svg class="icon" aria-hidden="true">
@@ -37,7 +37,7 @@
         :style="{
           'background-color': item.color,
           'z-index': 50-index,
-          'margin-Top': '-60px',
+          'margin-Top': '-60px'
         }"
         @click="item.clicked">
         <a-tooltip :color="item.color" placement="left">
@@ -54,17 +54,12 @@
 </template>
 
 <style lang="less" scoped>
-.right{
-  right: 50px;
-}
-.left{
-  right: 320px;
-}
 .menu{
   position: fixed;
   margin: auto;
   z-index: 100;
   top: 70px;
+  right: 50px;
   transition: all 0.3s ease-in-out;
   .main-icon{
     position: absolute;
@@ -85,6 +80,7 @@
     justify-content: center;
     align-items: center;
     transition: all ease-out 250ms;
+    border: 0;
   }
   .icon{
     font-size: 37px;
@@ -107,6 +103,12 @@
   :deep(.ant-btn-default){
     border-color: transparent;
   }
+}
+.right{
+  right: 50px;
+}
+.left{
+  right: 320px;
 }
 .menu:hover{
   .menu-item{
@@ -140,6 +142,7 @@ import { computed, ref, watch } from 'vue';
 import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
 import UserApi from '@api/userApi.js';
+import { message } from 'ant-design-vue';
 
 const user = computed(() => store.state.user.userData);
 
@@ -152,6 +155,13 @@ const MENU_ITEM_STATE = {
 }
 
 const isMenuRight = computed(() => store.state.isMenuRight);
+
+const menuClass = computed(() => {
+  if(router.path === '/'){
+    return isMenuRight.value ? 'right':'left';
+  }
+  return '';
+})
 
 // 横向列表
 const menuHorizontalItems = ref([
@@ -184,13 +194,13 @@ const menuVerticalItems = ref([
   {
     name: 'personalHomePage',
     key: 'personalHomePage',
-    hint: '个人主页/登陆',
+    hint: user.value.userId? '个人主页': '登录',
     color: '#6587AA',
     icon: '#icon-denglu',
     show: MENU_ITEM_STATE.SHOW,
     clicked: () => {
       if(user.value.userId){
-        alert('个人主页');
+        router.push('/self');
       }else{
         store.commit('changeLoginWindowState', {openLogin: true});
       }
@@ -205,6 +215,7 @@ const menuVerticalItems = ref([
     show:  user.value.userId ? MENU_ITEM_STATE.SHOW : MENU_ITEM_STATE.HIDE,
     clicked: () => {
       UserApi.logout();
+      message.success('退出成功');
     }
   }
 ]);
@@ -224,6 +235,9 @@ watch(
   (userId) => {
     const signOutItem = menuVerticalItems.value.find((item) => item.name === 'signOut');
     signOutItem.show = userId ? MENU_ITEM_STATE.SHOW : MENU_ITEM_STATE.HIDE;
+
+    const personalHomePageItem = menuVerticalItems.value.find((item) => item.name === 'personalHomePage');
+    personalHomePageItem.hint = userId? '个人主页': '登录';
   }
 )
 

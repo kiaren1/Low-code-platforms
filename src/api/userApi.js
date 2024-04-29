@@ -3,7 +3,8 @@ import store from '@store'
 const APIS = {
   Login: '/api/user/login',
   Switch: '/api/user/switch',
-  Signup: '/api/user/signup'
+  Signup: '/api/user/signup',
+  UpdateNickName: '/api/user/updatenickname'
 }
 
 export default {
@@ -32,5 +33,14 @@ export default {
   logout() {
     document.cookie = "token=";
     store.commit('clearUser')
+  },
+  // 更新昵称
+  async updateNickName(nickName) {
+    const user = await request.post(APIS.UpdateNickName, {
+      nickName,
+      userId: store.state.user.userData.userId
+    });
+    store.commit('setUser', user);
+    return user;
   }
 }

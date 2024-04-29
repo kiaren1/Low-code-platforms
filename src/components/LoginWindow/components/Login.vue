@@ -37,6 +37,7 @@ import { ref } from "vue";
 import {useStore} from 'vuex';
 import UserApi from '@api/userApi.js';
 import { message } from 'ant-design-vue';
+import eventBus from '@utils/eventBus';
 const store = useStore();
 
 const modifyForm = ref({
@@ -78,6 +79,7 @@ async function onFinish(){
       duration: 2,
     })
     store.commit('changeLoginWindowState', { openLogin: false });
+    eventBus.commit('login');
   }catch(e){
     console.log(e);
     usernameStatus.value = {

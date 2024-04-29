@@ -57,6 +57,7 @@ const store = useStore();
 
 const componentData = computed(() => store.state.componentData);
 const curComponentIndex = computed(() => store.state.curComponentIndex);
+const curComponent = computed(() => store.state.curComponent);
 const canEdit = ref(false);
 
 const reverseDataList = computed(() => {
@@ -71,6 +72,18 @@ function saveData(){
   const ansList = cloneDeep(reverseDataList.value);
   ansList.reverse();
   store.commit('setComponentData', ansList);
+  store.commit('setCurComponentIndex', getCurComponentIndex());
+  store.commit('recordSnapshot');
+}
+function getCurComponentIndex(){
+  const id = curComponent.value.id;
+  for (let index = 0; index < componentData.value.length; index++) {
+    const component = componentData.value[index];
+    if(component.id === id) {
+      return index;
+    }
+  }
+  return -1;
 }
 
 function transformIndex(index) {
@@ -81,7 +94,7 @@ function onClick(index) {
   if (!store.state.rightList) {
     store.commit('isShowRightList')
   }
-  setCurComponent(index)
+  setCurComponent(index);
 }
 
 function deleteComponent(index) {
@@ -125,7 +138,7 @@ function handleBlur(){
   saveData();
 }
 function handleInput(event, element) {
-  element.label = event.data;
+  element.label = event.target.innerHTML;
 }
 function handleMousedown(e) {
   if (canEdit.value) {

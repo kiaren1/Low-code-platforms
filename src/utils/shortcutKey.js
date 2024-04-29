@@ -62,17 +62,18 @@ export function listenGlobalKeyDown() {
     const { curComponent } = store.state
     const { keyCode } = e
     if (keyCode === ctrlKey || keyCode === commandKey) {
-      isCtrlOrCommandDown = true
+      isCtrlOrCommandDown = true;
     } else if (keyCode === deleteKey && curComponent) {
       store.commit('deleteComponent')
       store.commit('recordSnapshot')
     } else if (isCtrlOrCommandDown) {
+      e.preventDefault()
       if (unlockMap[keyCode] && (!curComponent || !curComponent.isLock)) {
-        e.preventDefault()
-        unlockMap[keyCode]()
+        unlockMap[keyCode]();
       } else if (lockMap[keyCode] && curComponent && curComponent.isLock) {
-        e.preventDefault()
-        lockMap[keyCode]()
+        lockMap[keyCode]();
+      } else {
+        basemap[keyCode]();
       }
     }
   }

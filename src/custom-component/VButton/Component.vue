@@ -34,9 +34,9 @@ onMounted(() => {
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;
-    background: var(--main-bg-color);
+    background: #fff;
     border: 1px solid #dcdfe6;
-    color: var(--text-color);
+    color: #606266;
     appearance: none;
     text-align: center;
     box-sizing: border-box;

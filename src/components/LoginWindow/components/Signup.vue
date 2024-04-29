@@ -43,6 +43,7 @@ import { ref } from "vue";
 import { useStore } from 'vuex';
 import UserApi from '@api/userApi.js';
 import { message } from 'ant-design-vue';
+import eventBus from '@utils/eventBus';
 const store = useStore();
 
 const modifyForm = ref({
@@ -68,8 +69,8 @@ const rules = ref({
     message: '请输入再次密码'
   }, 
   {
-    validator(rule, value, callback, source, options) {
-      if(value !== modifyForm.value.password) callback('第二次输入与第一次密码不同');
+    validator(rule, value, callback) {
+      if(value !== modifyForm.value.password) {callback('第二次输入与第一次密码不同');}
       callback();
     },
   }]
@@ -98,6 +99,7 @@ async function onFinish(){
       duration: 2,
     })
     store.commit('changeLoginWindowState', { openLogin: false });
+    eventBus.commit('login');
   }catch(e){
     usernameStatus.value = {
       status: 'error',

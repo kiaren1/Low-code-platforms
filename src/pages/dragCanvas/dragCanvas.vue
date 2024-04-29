@@ -20,6 +20,7 @@
 
       <!-- 中间画布 -->
       <section class="center" :style="rightList ? 'margin-right:288px' : 'margin-right:10px'">
+        <a-tag :color="currentProjectStatusItem.color" class="project-status-tag">{{ currentProjectStatusItem.label }}</a-tag>
         <div
           class="content"
           @drop="handleDrop"
@@ -72,13 +73,16 @@ import EventList from './components/EventList.vue';
 import generateID from '@/utils/generateID';
 import { changeComponentSizeWithScale } from '@/utils/changeComponentsSizeWithScale';
 import { useStore } from 'vuex';
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { listenGlobalKeyDown } from '@/utils/shortcutKey'
 import { cloneDeep } from 'lodash';
+import eventBus from '@utils/eventBus';
 import {
   CaretLeftOutlined,
   CaretRightOutlined
 } from '@ant-design/icons-vue';
+import ProjectManagement from '@api/projectManagement.js';
+
 const store = useStore();
 
 const leftList = ref(true);
@@ -92,9 +96,10 @@ const isClickComponent = computed(() => store.state.isClickComponent);
 const canvasStyleData = computed(() => store.state.canvasStyleData);
 const editor = computed(() => store.state.compose.editor);
 const rightList = computed(() => store.state.rightList);
+const projectStatus = computed(() => store.state.projectStatus);
 
 onMounted(() => {
-  restore()
+  restore();
   // 全局监听按键事件（实现快捷键）
   listenGlobalKeyDown();
   const savedMode = localStorage.getItem('isDarkMode');
@@ -103,29 +108,41 @@ onMounted(() => {
   } else {
     store.isDarkMode = false
   }
+  eventBus.on('login', restore); // 登录后需要获取最近的画布
 });
+onUnmounted(() => {
+  eventBus.off('login', restore)
+})
 
-function restore() {
+async function restore() {
   // 用保存的数据恢复画布
-  console.log('restore');
-  const JSONDATA = `[{"animations":[],"events":{},"groupStyle":{},"isLock":false,"collapseName":"style","linkage":{"duration":0,"data":[{"id":"","label":"","event":"","style":[{"key":"","value":""}]}]},"component":"SVGTriangle","label":"三角形","icon":"xingzhuang-sanjiaoxing","propValue":"","style":{"rotate":0,"opacity":1,"width":80,"height":80,"fontSize":"","fontWeight":400,"lineHeight":"","letterSpacing":0,"textAlign":"center","color":"","borderColor":"#000","backgroundColor":"rgba(255,255,255,1)","top":288,"left":578},"id":"VpbUirBrhzw6N0NeVdI_u"},{"animations":[],"events":{},"groupStyle":{},"isLock":false,"collapseName":"style","linkage":{"duration":0,"data":[{"id":"","label":"","event":"","style":[{"key":"","value":""}]}]},"component":"VText","label":"文字","propValue":"双击编辑文字","icon":"wenben","request":{"method":"GET","data":[],"url":"","series":false,"time":1000,"paramType":"","requestCount":0},"style":{"rotate":0,"opacity":1,"width":200,"height":28,"fontSize":"","fontWeight":400,"lineHeight":"","letterSpacing":0,"textAlign":"","color":"","top":235,"left":518},"id":"7KWIzsJKje2-_88kUp0cT"}]`
-  store.commit('setComponentData', JSON.parse(JSONDATA));
-  store.commit('recordSnapshot');
-  // if (localStorage.getItem('canvasData')) {
-  //   setDefaultcomponentData(JSON.parse(localStorage.getItem('canvasData')))
-  //   store.commit('setComponentData', JSON.parse(localStorage.getItem('canvasData')))
-  // }
-
-  // if (localStorage.getItem('canvasStyle')) {
-  //   store.commit('setCanvasStyle', JSON.parse(localStorage.getItem('canvasStyle')))
-  // }
+  const projectKey = localStorage.getItem('currentProjectKey');
+  if(projectKey){
+    try{
+      const { projectId, name, jsonData, status } = await ProjectManagement.getProjectData(projectKey);
+      const data = JSON.parse(jsonData);
+      store.commit('setComponentData', data.componentData);
+      store.commit('setCanvasStyle', data.canvasStyle);
+      store.commit('setProject', {
+        key: projectId,
+        name,
+        status
+      })
+    }catch(e){
+      console.error(e);
+      const {code} = e;
+      if(code === '404'){
+        localStorage.removeItem('currentProjectKey');
+      }
+    }
+  }
 }
 
 function isShowLeft(){
   leftList.value = !leftList.value;
 }
 function isShowRight(){
-  rightList.value = !rightList.value;
+  store.commit('isShowRightList');
 }
 watch(rightList, (value) => {
   store.commit('setMenuIsRight', !value);
@@ -173,6 +190,29 @@ function deselectCurComponent(e) {
     store.commit('hideContextMenu')
   }
 }
+
+const ProjectStatusMap = {
+  Setting: '0',
+  Publishing: '1',
+  Deleted: '2',
+}
+const currentProjectStatusItem = computed(() => {
+  const itemMap = {
+    [ProjectStatusMap.Setting]: {
+      color: 'processing',
+      label: '编辑中'
+    },
+    [ProjectStatusMap.Publishing]: {
+      color: 'success',
+      label: '已发布'
+    },
+    [ProjectStatusMap.Deleted]: {
+      color: 'error',
+      label: '已删除'
+    }
+  }
+  return itemMap[projectStatus.value];
+})
 
 </script>
 
@@ -265,6 +305,16 @@ function deselectCurComponent(e) {
       overflow: auto;
       padding: 20px;
       transition: all .3s;
+      position: relative;
+
+      .project-status-tag{
+        position: absolute;
+        top: 20px; left: 20px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
 
     .placeholder {

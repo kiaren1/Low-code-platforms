@@ -9,6 +9,12 @@ import event from './modules/event.js';
 import layer from './modules/layer.js';
 import lock from './modules/lock.js';
 
+const ProjectStatusMap = {
+  Setting: '0',
+  Publishing: '1',
+  Deleted: '2',
+}
+
 export default createStore({
   modules: {
     user,
@@ -35,6 +41,9 @@ export default createStore({
       fontSize: 14,
     },
     isInEdiotr: false, // 是否在编辑器中，用于判断复制、粘贴组件时是否生效，如果在编辑器外，则无视这些操作
+    projectKey: null, // 项目key，新建的时候没有
+    projectName: null, // 项目名称
+    projectStatus: ProjectStatusMap.Setting, // 项目状态
     componentData: [], // 画布组件数据
     curComponent: null,
     curComponentIndex: null,
@@ -79,7 +88,6 @@ export default createStore({
 
     toggleDarkMode(state, sateus) {
       state.isDarkMode = sateus
-      state.canvasStyleData.background = sateus ? '#817f7f' : '#fff'
       localStorage.setItem('isDarkMode', JSON.stringify(state.isDarkMode))
     },
 
@@ -92,12 +100,20 @@ export default createStore({
     },
 
     setCanvasStyle(state, style) {
-      state.canvasStyleData = style
+      // 对没有设置的项不进行覆盖
+      state.canvasStyleData = {
+        ...state.canvasStyleData,
+        ...style
+      }
     },
 
     setCurComponent(state, { component, index }) {
       state.curComponent = component
       state.curComponentIndex = index
+    },
+    
+    setCurComponentIndex(state, curComponentIndex) {
+      state.curComponentIndex = curComponentIndex;
     },
 
     setShapeStyle(state, { top, left, width, height, rotate }) {
@@ -111,6 +127,12 @@ export default createStore({
 
     setShapeSingleStyle({ curComponent }, { key, value }) {
       curComponent.style[key] = value
+    },
+
+    setProject(state, {key, name, status}){
+      state.projectKey = key;
+      state.projectName = name;
+      state.projectStatus = status;
     },
 
     setComponentData(state, componentData = []) {
@@ -141,4 +163,4 @@ export default createStore({
       }
     },
   },
-})
+});
