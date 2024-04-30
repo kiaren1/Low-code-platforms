@@ -1,5 +1,5 @@
 <template>
-  <article class="menu" :class="menuClass">
+  <article class="menu" :class="{[menuClass]: true, delay: isDelay}">
     <div class="main-icon">
       <div class="content menu-item">
         <svg class="icon" aria-hidden="true">
@@ -53,107 +53,17 @@
   </article>
 </template>
 
-<style lang="less" scoped>
-.menu{
-  position: fixed;
-  margin: auto;
-  z-index: 100;
-  top: 40px;
-  right: 50px;
-  transition: right 0.7s ease-in-out, top 0.7s ease-in-out;
-
-  .menu-item{
-    height: 60px;
-    width: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all ease-out 250ms;
-    border: 0;
-  }
-  .icon{
-    font-size: 37px;
-    outline: none;
-  }
-  .main-icon{
-    position: absolute;
-    z-index: 100;
-    right: -1px;
-    top: -1px;
-
-    .content{
-      border-radius: 50%;
-      background-color: #E0C068;
-      box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    .menu-item{
-      height: 62px;
-      width: 62px;
-    }
-  }
-
-  .menu-horizontal{
-    display: flex;
-    flex-direction: row-reverse;
-    position: absolute;
-    top: 0;
-    right: 60px;
-  }
-  .menu-vertical{
-    position: absolute;
-    right: 0;
-    top: 60px;
-  }
-
-  :deep(.ant-btn-default){
-    border-color: transparent;
-  }
-}
-.right{
-  right: 50px;
-  top: 70px;
-}
-.left{
-  right: 320px;
-  top: 70px;
-}
-.menu:hover{
-  .menu-item{
-    box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
-  }
-  .main-icon{
-    .content{
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
-      transform: translate(3px, 2px);
-    }
-  }
-  .menu-horizontal{
-    margin-right: -3px;
-  }
-  .item-horizontal{
-    margin-right: 15px !important;
-  }
-  .item-vertical{
-    margin-top: 15px !important;
-  }
-
-  .menu-item:hover{
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
-    transform: translate(3px, 2px) !important;
-  }
-}
-</style>
-
 <script setup>
 import { computed, ref, watch } from 'vue';
-import {useStore} from 'vuex';
-import {useRouter} from 'vue-router';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
 import UserApi from '@api/userApi.js';
 import { message } from 'ant-design-vue';
 
 const user = computed(() => store.state.user.userData);
 
 const store = useStore();
+const route = useRoute();
 const router = useRouter();
 
 const MENU_ITEM_STATE = {
@@ -163,12 +73,20 @@ const MENU_ITEM_STATE = {
 
 const isMenuRight = computed(() => store.state.isMenuRight);
 
-const menuClass = computed(() => {
-  if(router.currentRoute.value.path === '/'){
-    return isMenuRight.value ? 'right':'left';
+const isDelay = ref(false);
+let rememberPath = '';
+const menuClass = ref('');
+watch([() => route.path, isMenuRight], ([newPath, isMenuRightValue]) => {
+  isDelay.value = false;
+  if(rememberPath !== route.path){
+    // 是换页，需要设置延迟
+    isDelay.value = true;
+    rememberPath = route.path;
   }
-  return '';
-})
+  if(route.path === '/'){
+    menuClass.value = isMenuRight.value ? 'right':'left';
+  }else{menuClass.value = '';}
+}, {immediate: true})
 
 // 横向列表
 const menuHorizontalItems = ref([
@@ -249,3 +167,97 @@ watch(
 )
 
 </script>
+
+<style lang="less" scoped>
+.menu{
+  position: fixed;
+  margin: auto;
+  z-index: 100;
+  top: 40px;
+  right: 50px;
+  transition: right 0.5s ease-in-out, top 0.5s ease-in-out;
+
+  .menu-item{
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all ease-out 250ms;
+    border: 0;
+  }
+  .icon{
+    font-size: 37px;
+    outline: none;
+  }
+  .main-icon{
+    position: absolute;
+    z-index: 100;
+    right: -1px;
+    top: -1px;
+
+    .content{
+      border-radius: 50%;
+      background-color: #E0C068;
+      box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    .menu-item{
+      height: 62px;
+      width: 62px;
+    }
+  }
+
+  .menu-horizontal{
+    display: flex;
+    flex-direction: row-reverse;
+    position: absolute;
+    top: 0;
+    right: 60px;
+  }
+  .menu-vertical{
+    position: absolute;
+    right: 0;
+    top: 60px;
+  }
+
+  :deep(.ant-btn-default){
+    border-color: transparent;
+  }
+}
+.right{
+  right: 50px;
+  top: 70px;
+}
+.left{
+  right: 320px;
+  top: 70px;
+}
+.delay{
+  transition: all 0.7s ease-in-out 0.5s;
+}
+.menu:hover{
+  .menu-item{
+    box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  .main-icon{
+    .content{
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+      transform: translate(3px, 2px);
+    }
+  }
+  .menu-horizontal{
+    margin-right: -3px;
+  }
+  .item-horizontal{
+    margin-right: 15px !important;
+  }
+  .item-vertical{
+    margin-top: 15px !important;
+  }
+
+  .menu-item:hover{
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+    transform: translate(3px, 2px) !important;
+  }
+}
+</style>
