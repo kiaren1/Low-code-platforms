@@ -233,7 +233,7 @@ watch(
   top: 70px;
 }
 .delay{
-  transition: all 0.7s ease-in-out 0.5s;
+  transition: all 1s ease-in-out 0.5s;
 }
 .menu:hover{
   .menu-item{
