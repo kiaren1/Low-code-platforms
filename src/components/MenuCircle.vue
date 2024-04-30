@@ -58,9 +58,9 @@
   position: fixed;
   margin: auto;
   z-index: 100;
-  top: 70px;
+  top: 40px;
   right: 50px;
-  transition: all 0.3s ease-in-out;
+  transition: right 0.7s ease-in-out, top 0.7s ease-in-out;
   .main-icon{
     position: absolute;
     z-index: 100;
@@ -106,9 +106,11 @@
 }
 .right{
   right: 50px;
+  top: 70px;
 }
 .left{
   right: 320px;
+  top: 70px;
 }
 .menu:hover{
   .menu-item{
@@ -157,7 +159,7 @@ const MENU_ITEM_STATE = {
 const isMenuRight = computed(() => store.state.isMenuRight);
 
 const menuClass = computed(() => {
-  if(router.path === '/'){
+  if(router.currentRoute.value.path === '/'){
     return isMenuRight.value ? 'right':'left';
   }
   return '';

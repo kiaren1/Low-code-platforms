@@ -152,7 +152,6 @@ function clearStyle(e, element) {
   if (text !== '') {
     insertTextAtCaret(text);
   }
-  console.log(e.target.innerHTML);
   element.label = e.target.innerHTML;
 }
 </script>

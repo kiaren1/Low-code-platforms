@@ -81,7 +81,6 @@ const isShowAnimationSetting = ref(false);
 const curIndex = ref(0);
 
 function addAnimation(animate) {
-  console.log(111);
   store.commit('addAnimation', animate);
   isShowAnimation.value = false;
 }

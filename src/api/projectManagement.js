@@ -7,7 +7,8 @@ const APIS = {
   getProject: '/api/project/projectdata',
   deleteProject: '/api/project/delete',
   publishProject: '/api/project/publish',
-  unPublish: '/api/project/unpublish'
+  unPublish: '/api/project/unpublish',
+  projectList: '/api/project/projectList'
 }
 
 // 保存
@@ -64,11 +65,18 @@ function deleteProject(key){
   return request.post(APIS.deleteProject, key);
 }
 
+function getProjectList(params) {
+  return request.get(APIS.projectList, {
+    params
+  })
+}
+
 export default {
   update,
   getProjectData,
   create,
   publish,
   deleteProject,
-  unPublish
+  unPublish,
+  getProjectList
 }

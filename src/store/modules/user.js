@@ -2,9 +2,9 @@ export default {
   state: {
     // 在这里定义应用的初始状态
     userData: {
-      userId: '',
-      userName: '',
-      nickName: '',
+      userId: null,
+      userName: null,
+      nickName: null,
     }
   },
   mutations: {

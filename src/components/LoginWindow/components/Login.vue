@@ -79,9 +79,8 @@ async function onFinish(){
       duration: 2,
     })
     store.commit('changeLoginWindowState', { openLogin: false });
-    eventBus.commit('login');
+    eventBus.emit('login');
   }catch(e){
-    console.log(e);
     usernameStatus.value = {
       status: 'error',
       help: '用户名或密码错误'

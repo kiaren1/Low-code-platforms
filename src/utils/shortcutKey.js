@@ -56,7 +56,6 @@ let isCtrlOrCommandDown = false
 // 全局监听按键操作并执行相应命令
 export function listenGlobalKeyDown() {
   window.onkeydown = (e) => {
-    console.log(e.keyCode);
     if (!store.state.isInEdiotr) { return }
 
     const { curComponent } = store.state

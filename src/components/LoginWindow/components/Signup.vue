@@ -99,7 +99,7 @@ async function onFinish(){
       duration: 2,
     })
     store.commit('changeLoginWindowState', { openLogin: false });
-    eventBus.commit('login');
+    eventBus.emit('login');
   }catch(e){
     usernameStatus.value = {
       status: 'error',

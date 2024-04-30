@@ -22,6 +22,7 @@ request.interceptors.request.use((config) => {
   return config;
 }, (error) => {
   // response 错误处理
+  message.destroy();
   message.error({
     content: '请求异常',
     duration: 2,
@@ -35,6 +36,7 @@ request.interceptors.response.use((response) => {
   const res = response.data;
   if (res.code === undefined || res.code !== 200) {
     res.msg = res.msg || res.message || res.errmsg || '服务异常';
+    message.destroy();
     message.error({
       content: res.msg,
       duration: 2,
@@ -45,6 +47,7 @@ request.interceptors.response.use((response) => {
   return res.data !== undefined ? res.data : response;
 }, (error) => {
   // response 错误处理
+  message.destroy();
   message.error({
     content: '请求异常',
     duration: 4,

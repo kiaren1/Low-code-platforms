@@ -191,7 +191,6 @@ function hideArea() {
 function createGroup() {
   // 获取选中区域的组件数据
   const areaData = getSelectArea();
-  console.log('areaData', areaData);
   if (areaData.length <= 1) {
     hideArea()
     return
