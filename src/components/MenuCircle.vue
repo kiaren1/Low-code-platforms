@@ -61,18 +61,7 @@
   top: 40px;
   right: 50px;
   transition: right 0.7s ease-in-out, top 0.7s ease-in-out;
-  .main-icon{
-    position: absolute;
-    z-index: 100;
-    right: 0;
-    top: 0;
 
-    .content{
-      border-radius: 50%;
-      background-color: #E0C068;
-      box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
-    }
-  }
   .menu-item{
     height: 60px;
     width: 60px;
@@ -85,6 +74,22 @@
   .icon{
     font-size: 37px;
     outline: none;
+  }
+  .main-icon{
+    position: absolute;
+    z-index: 100;
+    right: -1px;
+    top: -1px;
+
+    .content{
+      border-radius: 50%;
+      background-color: #E0C068;
+      box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    .menu-item{
+      height: 62px;
+      width: 62px;
+    }
   }
 
   .menu-horizontal{

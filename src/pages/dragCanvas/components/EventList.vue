@@ -101,8 +101,12 @@ function handleRequestSetting(event){
       width: 100px;
 
       display: flex;
+      align-items: center;
       .cursor{
         cursor: pointer;
+      }
+      .anticon{
+        height: fit-content;
       }
     }
   }

@@ -20,7 +20,16 @@
 
       <!-- 中间画布 -->
       <section class="center" :style="rightList ? 'margin-right:288px' : 'margin-right:10px'">
-        <a-tag :color="currentProjectStatusItem.color" class="project-status-tag">{{ currentProjectStatusItem.label }}</a-tag>
+        <a-tag :color="currentProjectStatusItem.color" class="project-status-tag">
+          {{ currentProjectStatusItem.label }}
+          <router-link
+            v-if="projectStatus === ProjectStatusMap.Publishing"
+            :to="`/works?projectId=${projectKey}`"
+            style="margin-left:10px"
+          >
+            {{ `${basePath}/works?projectId=${projectKey}` }}
+          </router-link>
+        </a-tag>
         <div
           class="content"
           @drop="handleDrop"
@@ -97,6 +106,7 @@ const canvasStyleData = computed(() => store.state.canvasStyleData);
 const editor = computed(() => store.state.compose.editor);
 const rightList = computed(() => store.state.rightList);
 const projectStatus = computed(() => store.state.projectStatus);
+const projectKey = computed(() => store.state.projectKey);
 
 onMounted(() => {
   restore();
@@ -119,15 +129,7 @@ async function restore() {
   const projectKey = localStorage.getItem('currentProjectKey');
   if(projectKey){
     try{
-      const { projectId, name, jsonData, status } = await ProjectManagement.getProjectData(projectKey);
-      const data = JSON.parse(jsonData);
-      store.commit('setComponentData', data.componentData);
-      store.commit('setCanvasStyle', data.canvasStyle);
-      store.commit('setProject', {
-        key: projectId,
-        name,
-        status
-      })
+      await ProjectManagement.getProjectData(projectKey);
     }catch(e){
       console.error(e);
       const {code} = e;
@@ -212,7 +214,17 @@ const currentProjectStatusItem = computed(() => {
     }
   }
   return itemMap[projectStatus.value];
-})
+});
+
+const basePath = computed(() => {
+  const fullPath = window.location.href;
+  const regex = /(.*)\/#/;
+  const match = fullPath.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return '';
+});
 
 </script>
 
@@ -314,6 +326,7 @@ const currentProjectStatusItem = computed(() => {
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 100;
       }
     }
 

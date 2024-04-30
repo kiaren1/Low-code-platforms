@@ -73,10 +73,7 @@ const isDarkMode = computed(() => store.state.isDarkMode);
 const curComponent = computed(() => store.state.curComponent);
 
 const isShowAnimation = ref(false);
-const hoverPreviewAnimate = ref('');
 const animationActiveName = ref('进入');
-const showAnimatePanel = ref(false);
-const timer = ref(null);
 const isShowAnimationSetting = ref(false);
 const curIndex = ref(0);
 
@@ -122,8 +119,12 @@ async function handleRunAnimation(target, animate) {
     width: 140px;
 
     display: flex;
+    align-items: center;
     .cursor{
       cursor: pointer;
+    }
+    .anticon{
+      height: fit-content;
     }
   }
 

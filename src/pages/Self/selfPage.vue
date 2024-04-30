@@ -49,6 +49,8 @@ onMounted(() => {
   modifyForm.nickName = userData.value.nickName;
   createRibbons({
     body_: selfPageRef.value,
+    color: '#EAE8E9',
+    horizontalSpeed: 250,
   });
 })
 watch(() => userData.value.nickName, (newValue) => {modifyForm.nickName = newValue});

@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash'
 // 设置画布默认数据
 let defaultcomponentData = []
 function getDefaultcomponentData() {
-  return JSON.parse(JSON.stringify(defaultcomponentData))
+  return cloneDeep(defaultcomponentData);
 }
 
 export function setDefaultcomponentData(data = []) {
@@ -54,5 +54,9 @@ export default {
         state.snapshotData = state.snapshotData.slice(0, state.snapshotIndex + 1)
       }
     },
+
+    setDefaultcomponentData(state, defaultData){
+      setDefaultcomponentData(defaultData);
+    }
   },
 }

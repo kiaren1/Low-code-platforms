@@ -36,7 +36,7 @@
 <script setup>
 import { getCanvasStyle } from '@/utils/style';
 import { useStore } from 'vuex';
-import ComponentWrapper from './ComponentWrapper.vue';
+import ComponentWrapper from '@/components/canvasComponents/ComponentWrapper.vue';
 import { changeStyleWithScale } from '@/utils/translate';
 import { toPng } from 'html-to-image';
 import { cloneDeep } from 'lodash';

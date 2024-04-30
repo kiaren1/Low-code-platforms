@@ -65,6 +65,13 @@ const isDisabled = computed(() => {
 });
 
 onMounted(() => {
+  refreash();
+});
+
+watch([() => curComponent.value.animations, curIndex], () => {
+  refreash();
+})
+function refreash(){
   const { label, animationTime, isLoop = false, value } = curComponent.value.animations[curIndex.value] || {}
   config.value = {
     animationTime,
@@ -72,7 +79,7 @@ onMounted(() => {
     isLoop,
     value,
   }
-});
+}
 
 function handleCloseModal() {
   emits('close');

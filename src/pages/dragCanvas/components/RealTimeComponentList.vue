@@ -12,7 +12,11 @@
           @click="onClick(transformIndex(index))" 
           :class="{ actived: transformIndex(index) === curComponentIndex }"
         >
-          <svg class="icon" aria-hidden="true">
+          <!-- Group组合给个单独的图标 -->
+          <svg v-if="element.component === 'Group'" class="icon" aria-hidden="true">
+            <use xlink:href="#icon-zuhe"></use>
+          </svg>
+          <svg v-else class="icon" aria-hidden="true">
             <use :xlink:href="`#icon-${element.icon}`"></use>
           </svg>
           <div

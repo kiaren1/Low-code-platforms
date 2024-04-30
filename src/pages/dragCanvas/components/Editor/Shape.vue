@@ -214,7 +214,7 @@ function getCursor() {
 }
 
 function handleMouseDownOnShape(e) {
-  // 将当前点击组件的事件传播出去，目前的消费是 VText 组件 https://github.com/woai3c/visual-drag-demo/issues/90
+  // 将当前点击组件的事件传播出去，目前的消费是 VText 组件
   nextTick(() => eventBus.emit('componentClick'));
 
   store.commit('setInEditorStatus', true);

@@ -1,5 +1,6 @@
 // 工程项目管理器，用于管理产出的数据（保存、下拉）
 import request from '@utils/request.js';
+import store from '@store';
 
 const APIS = {
   createProject: '/api/project/create',
@@ -35,12 +36,27 @@ function create(props){
 }
 
 // 下拉
-function getProjectData(key){
-  return request.get(APIS.getProject, {
+async function getProjectData(key, remember=true){
+  const ans = await request.get(APIS.getProject, {
     params: {
       key: key
     }
   });
+  const { projectId, name, jsonData, status } = ans;
+  const data = JSON.parse(jsonData);
+  store.commit('setComponentData', data.componentData);
+  store.commit('setCanvasStyle', data.canvasStyle);
+  store.commit('setDefaultcomponentData', data.componentData);
+
+  // 修改projectId会记住本次的Id，但是在非编辑页时不应该进行记录
+  if(remember) {
+    store.commit('setProject', {
+      key: projectId,
+      name,
+      status
+    })
+  }
+  return ans;
 }
 
 // 发布 (可能是有key的直接发布或者是只有内容的发布)

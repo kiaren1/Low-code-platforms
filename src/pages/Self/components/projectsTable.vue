@@ -15,13 +15,21 @@
             :src="record.coverPic"
           />
         </template>
+        <template v-if="column.key === 'path'">
+          <router-link :to="`/works?projectId=${record.projectId}`">
+            {{ `${basePath}/works?projectId=${record.projectId}` }}
+          </router-link>
+        </template>
         <template v-else-if="column.key === 'action'">
-          <a-space>
-            <a-button type="primary">编辑</a-button>
-            <a-button v-if="!isPublished">发布</a-button>
-            <a-button v-if="isPublished">前往</a-button>
-            <a-button danger v-if="isPublished">下架</a-button>
-          </a-space>
+          <div class="row">
+            <a-button type="primary" @click="handleToSetting(record.projectId, record.name)">编辑</a-button>
+            <a-button v-if="!isPublished" @click="handlePublish(record.projectId)">发布</a-button>
+            <a-button 
+              v-if="isPublished" 
+              @click="()=>{router.push(`/works?projectId=${record.projectId}`)}"
+            >前往</a-button>
+            <a-button danger v-if="isPublished" @click="handleUnPublish(record.projectId)">下架</a-button>
+          </div>
         </template>
       </template>
     </a-table>
@@ -35,9 +43,10 @@ import projectManagement from '@api/projectManagement.js';
 import moment from 'moment';
 import { useStore } from 'vuex';
 import eventBus from '@utils/eventBus';
+import { RouterLink, useRouter } from 'vue-router';
+import { message } from "ant-design-vue";
 const store = useStore();
-
-const userData = computed(() => store.state.user.userData);
+const router = useRouter();
 
 const ProjectStatusMap = {
   Setting: '0',
@@ -81,6 +90,7 @@ const basicColumns = reactive([
     title: '操作',
     dataIndex: 'action',
     key: 'action',
+    width: isPublished.value ? 250 : 170,
     fixed: 'right'
   },
 ])
@@ -101,22 +111,22 @@ const loading = ref(false);
 const pagination = ref({
   total: 10,
   current: 1,
+  pageSize: 10
 });
 
 onMounted(() => {
   refreshData();
   eventBus.on('login', refreshData);
+  eventBus.on('refreash', refreshData);
 });
 
 onUnmounted(() => {
   eventBus.off('login', refreshData);
+  eventBus.off('refreash', refreshData);
 })
 
 function refreshData(){
-  handleTableChange({
-    ...pagination.value,
-    pageSize: 10
-  });
+  handleTableChange(pagination.value);
 }
 
 async function handleTableChange(nextPagination){
@@ -127,17 +137,47 @@ async function handleTableChange(nextPagination){
   }
   const { total, projectList } = await projectManagement.getProjectList(params);
   for (const projectItem of projectList) {
-    projectItem.createTime = moment(projectItem.createTime).format('YY-MM-DD HH:mm:ss');
-    projectItem.updateTime = moment(projectItem.updateTime).format('YY-MM-DD HH:mm:ss');
+    projectItem.createTime = moment(projectItem.createTime).format('YYYY-MM-DD HH:mm');
+    projectItem.updateTime = moment(projectItem.updateTime).format('YYYY-MM-DD HH:mm');
   }
   tableList.value = projectList;
   pagination.value = {
     total,
     current: nextPagination.current,
+    pageSize: nextPagination.pageSize
   };
 }
 
+const basePath = computed(() => {
+  const fullPath = window.location.href;
+  const regex = /(.*)\/#/;
+  const match = fullPath.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return '';
+});
 
+async function handlePublish(projectId){
+  await projectManagement.publish({
+    key: projectId
+  });
+  message.success('发布成功');
+  eventBus.emit('refreash');
+}
+async function handleUnPublish(projectId){
+  await projectManagement.unPublish(projectId);
+  message.success('下架成功');
+  eventBus.emit('refreash');
+}
+function handleToSetting(key, name){
+  store.commit('setProject', {
+    key,
+    name,
+    status: isPublished.value?ProjectStatusMap.Publishing:ProjectStatusMap.Setting,
+  });  
+  router.push('/');
+}
 
 </script>
 
@@ -145,5 +185,12 @@ async function handleTableChange(nextPagination){
 .publish-table{
   height: 100%;
   width: 100%;
+
+  .row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
 }
 </style>

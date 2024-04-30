@@ -129,7 +129,7 @@ import { message } from 'ant-design-vue';
 import AceEditor from './Editor/AceEditor.vue';
 import Preview from './Editor/Preview.vue';
 import SavePreview from './Editor/SavePreview.vue';
-import { $, compressImage } from '@/utils/utils';
+import { compressImage } from '@/utils/utils';
 import projectManagement from '@api/projectManagement.js';
 import changeComponentsSizeWithScale, { changeComponentSizeWithScale } from '@/utils/changeComponentsSizeWithScale';
 const store = useStore();
@@ -164,15 +164,6 @@ const savePreviewMode = ref('save'); // save保存 saveAs另存 publish发布
 watch(isDarkMode, (newValue) => {
   store.commit('toggleDarkMode', newValue);
 })
-
-// 记录下最近浏览的项目key，下次打开的时候拉这个
-watch(projectKey, (newKey) => {
-  if(newKey){
-    localStorage.setItem('currentProjectKey', newKey);
-  }else{
-    localStorage.removeItem('currentProjectKey')
-  }
-});
 
 function onAceEditorChange() {
   isShowAceEditor.value = !isShowAceEditor.value;

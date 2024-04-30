@@ -45,7 +45,9 @@ const { config } = toRefs(props);
 const component = ref();
 
 onMounted(() => {
-  runAnimation(component.value.$el, config.value.animations);
+  if(component.value){
+    runAnimation(component.value.$el, config.value.animations);
+  }
 });
 
 function onClick() {
