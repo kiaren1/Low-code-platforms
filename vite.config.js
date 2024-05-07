@@ -25,6 +25,7 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@store': path.resolve(__dirname, './src/store/vuexStore'),
       '@api': path.resolve(__dirname, './src/api'),
+      '@custom-component': path.resolve(__dirname, './src/custom-component'),
     }
   },
   server: {
@@ -34,7 +35,7 @@ export default defineConfig({
     cors: true, //为开发服务器配置 CORS
     proxy: { //配置代理
       '/api': {
-        target: 'http://localhost:8211',
+        target: 'http://127.0.0.1:8211',
         changeOrigin: true,
       },
     }

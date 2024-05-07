@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port 8099"
   },
   "dependencies": {
     "@vitejs/plugin-legacy": "^4.1.1",

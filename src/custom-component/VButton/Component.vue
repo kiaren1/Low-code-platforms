@@ -9,9 +9,9 @@ import { toRefs, onMounted, ref } from 'vue';
 const elRef = ref();
 const props = defineProps({
   propValue: {
-    type: Object,
+    type: String,
     required: true,
-    default: () => {},
+    default: '',
   },
   element: {
     type: Object,

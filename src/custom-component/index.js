@@ -19,11 +19,11 @@ const svgs = [
 
 export function initComponent(app) {
   components.forEach((key) => {
-    app.component(key, defineAsyncComponent(() => import(`./${key}/Component.vue` /* @vite-ignore */)));
-    app.component(key + 'Attr', defineAsyncComponent(() => import(`./${key}/Attr.vue` /* @vite-ignore */)));
+    app.component(key, defineAsyncComponent(() => import(`@custom-component/${key}/Component.vue`)));
+    app.component(key + 'Attr', defineAsyncComponent(() => import(`@custom-component/${key}/Attr.vue`)));
   });
   svgs.forEach((key) => {
-    app.component(key, defineAsyncComponent(() => import(`./svgs/${key}/Component.vue` /* @vite-ignore */)));
-    app.component(key + 'Attr', defineAsyncComponent(() => import(`./svgs/${key}/Attr.vue` /* @vite-ignore */)));
+    app.component(key, defineAsyncComponent(() => import(`@custom-component/svgs/${key}/Component.vue`)));
+    app.component(key + 'Attr', defineAsyncComponent(() => import(`@custom-component/svgs/${key}/Attr.vue`)));
   });
 }

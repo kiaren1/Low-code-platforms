@@ -6,7 +6,10 @@ import store from '@store';
 
 axios.defaults.withCredentials = true;
 
-const request = axios.create();
+const request = axios.create({
+  baseURL: import.meta.env.PROD ? 'http://42.193.126.123:8211' : 'http://localhost:8211',
+  withCredentials: true
+});
 
 request.interceptors.request.use((config) => {
   // request 封装request
@@ -77,23 +80,6 @@ function getURLParam(data) {
   })
 
   return result ? '?' + result : ''
-}
-
-function getURLData(data, paramType) {
-  if (!data) { return '' }
-
-  if (paramType === 'array') {
-    return data
-  }
-
-  const result = {}
-  data.forEach((item) => {
-    if (item[0]) {
-      result[item[0]] = item[1]
-    }
-  })
-
-  return result
 }
 
 export function getURL(url) {
