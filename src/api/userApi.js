@@ -13,6 +13,7 @@ export default {
       username, password
     });
     store.commit('setUser', user);
+    localStorage.setItem('token', user.token);
     return user;
   },
   async switch() {
@@ -27,12 +28,13 @@ export default {
       username, password
     });
     store.commit('setUser', user);
+    localStorage.setItem('token', user.token);
     return user;
   },
   // 退出登录
   logout() {
-    document.cookie = "token=";
-    store.commit('clearUser')
+    localStorage.removeItem('token');
+    store.commit('clearUser');
   },
   // 更新昵称
   async updateNickName(nickName) {

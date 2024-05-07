@@ -141,6 +141,7 @@ const menuVerticalItems = ref([
     clicked: () => {
       UserApi.logout();
       message.success('退出成功');
+      router.push('/');
     }
   }
 ]);

@@ -14,6 +14,7 @@ const request = axios.create({
 request.interceptors.request.use((config) => {
   // request 封装request
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
+  config.headers.token = localStorage.getItem('token');
   if (config.method === 'post') {
     if (config.contentType === 'application/x-www-form-urlencoded') {
       config.headers['content-type'] = 'application/x-www-form-urlencoded';
