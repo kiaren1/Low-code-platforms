@@ -1,5 +1,5 @@
 <template>
-  <button class="v-button" ref="elRef">{{ propValue }}</button>
+  <a-button :type="propValue.type" class="v-button" ref="elRef"><div>{{ propValue.text }}</div></a-button>
 </template>
 
 <script setup>
@@ -9,9 +9,12 @@ import { toRefs, onMounted, ref } from 'vue';
 const elRef = ref();
 const props = defineProps({
   propValue: {
-    type: String,
+    type: Object,
     required: true,
-    default: '',
+    default: () => ({
+      text: '',
+      type: '',
+    }),
   },
   element: {
     type: Object,
@@ -30,33 +33,10 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .v-button {
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #dcdfe6;
-    color: #606266;
-    appearance: none;
-    text-align: center;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    transition: .1s;
-    font-weight: 500;
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
-
-    &:active {
-        color: #3a8ee6;
-        border-color: #3a8ee6;
-        outline: 0;
-    }
-
-    &:hover {
-        background-color: #ecf5ff;
-        color: #3a8ee6;
-    }
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

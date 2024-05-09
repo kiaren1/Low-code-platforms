@@ -1,16 +1,13 @@
 import store from '../vuexStore'
 import { cloneDeep } from 'lodash'
-
 // 设置画布默认数据
 let defaultcomponentData = []
 function getDefaultcomponentData() {
   return cloneDeep(defaultcomponentData);
 }
-
 export function setDefaultcomponentData(data = []) {
   defaultcomponentData = data
 }
-
 export default {
   state: {
     // 通过每次更新维持一个快照来实现回滚功能
@@ -37,7 +34,6 @@ export default {
         store.commit('setComponentData', componentData)
       }
     },
-
     redo(state) {
       // 反撤销
       if (state.snapshotIndex < state.snapshotData.length - 1) {
@@ -45,7 +41,6 @@ export default {
         store.commit('setComponentData', cloneDeep(state.snapshotData[state.snapshotIndex]))
       }
     },
-
     recordSnapshot(state) {
       // 添加新的快照
       state.snapshotData[++state.snapshotIndex] = cloneDeep(store.state.componentData)
@@ -54,7 +49,6 @@ export default {
         state.snapshotData = state.snapshotData.slice(0, state.snapshotIndex + 1)
       }
     },
-
     setDefaultcomponentData(state, defaultData){
       setDefaultcomponentData(defaultData);
     }

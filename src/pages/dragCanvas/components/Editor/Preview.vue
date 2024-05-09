@@ -3,7 +3,7 @@
     <div ref="containerRef" class="content">
       <div class="canvas-container">
         <div
-          v-if="open"
+          v-if="showCanvas"
           class="canvas"
           :style="{
             ...getCanvasStyle(canvasStyleData),
@@ -57,13 +57,23 @@ const canvasStyleData = computed(() => store.state.canvasStyleData);
 
 const copyData = ref([]);
 const open = ref(show.value);
+const showCanvas = ref(show.value); // 让关闭时不闪烁
 watch(show, (newValue) => {
   open.value = newValue;
 });
-watch(open, (newValue) => {
+watch(open, (newValue, oldValue) => {
   emits('update:show', newValue);
   if(newValue === false){
     emits('close');
+  }
+
+  if(newValue){
+    showCanvas.value = true;
+  }
+  if(!newValue && oldValue){
+    setTimeout(() => {
+      showCanvas.value = false;
+    }, 500);
   }
 });
 watch(open, () => {
@@ -100,8 +110,10 @@ async function htmlToImage() {
 
 <style lang="scss" scoped>
 .content {
+  height: 75vh;
+  overflow: auto;
   .canvas-container {
-    overflow: auto;
+    // overflow: scroll;
     .canvas {
       background: #fff;
       position: relative;

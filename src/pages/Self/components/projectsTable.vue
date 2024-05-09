@@ -130,12 +130,14 @@ function refreshData(){
 }
 
 async function handleTableChange(nextPagination){
+  loading.value = true;
   const params = {
     status: isPublished.value ? ProjectStatusMap.Publishing : ProjectStatusMap.Setting,
     pageSize: nextPagination.pageSize,
     pageNumber: nextPagination.current - 1
   }
   const { total, projectList } = await projectManagement.getProjectList(params);
+  loading.value = false;
   for (const projectItem of projectList) {
     projectItem.createTime = moment(projectItem.createTime).format('YYYY-MM-DD HH:mm');
     projectItem.updateTime = moment(projectItem.updateTime).format('YYYY-MM-DD HH:mm');

@@ -30,7 +30,6 @@ export default {
 
     compose({ areaData, editor }) {
       const componentData = store.state.componentData;
-
       const components = []
       areaData.components.forEach((component) => {
         if (component.component !== 'Group') {
@@ -49,6 +48,7 @@ export default {
         }
       })
 
+      // 构建Group组件
       const groupComponent = {
         id: generateID(),
         component: 'Group',
@@ -61,15 +61,12 @@ export default {
         },
         propValue: components,
       }
-
-      createGroupStyle(groupComponent)
+      createGroupStyle(groupComponent);
 
       store.commit('addComponent', {
         component: groupComponent,
       })
-
-      eventBus.emit('hideArea')
-
+      eventBus.emit('hideArea');
       store.commit('batchDeleteComponent', areaData.components)
       store.commit('setCurComponent', {
         component: componentData[componentData.length - 1],

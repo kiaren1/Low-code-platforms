@@ -35,7 +35,7 @@ function create(props){
   return request.post(APIS.createProject, props);
 }
 
-// 下拉
+// 下拉画布数据
 async function getProjectData(key, remember=true){
   const ans = await request.get(APIS.getProject, {
     params: {

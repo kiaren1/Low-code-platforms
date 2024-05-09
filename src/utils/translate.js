@@ -20,11 +20,10 @@ export function calculateRotatedPointCoordinate(point, center, rotate) {
      *  点a(x, y)
      *  旋转中心c(x, y)
      *  旋转后点n(x, y)
-     *  旋转角度θ                tan ??
+     *  旋转角度θ，这里是反旋转所以传入 -rotate
      * nx = cosθ * (ax - cx) - sinθ * (ay - cy) + cx
      * ny = sinθ * (ax - cx) + cosθ * (ay - cy) + cy
      */
-
   return {
     x: (point.x - center.x) * Math.cos(angleToRadian(rotate)) - (point.y - center.y) * Math.sin(angleToRadian(rotate)) + center.x,
     y: (point.x - center.x) * Math.sin(angleToRadian(rotate)) + (point.y - center.y) * Math.cos(angleToRadian(rotate)) + center.y,

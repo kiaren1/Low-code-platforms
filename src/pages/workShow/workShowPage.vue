@@ -21,7 +21,7 @@ onMounted(() => {
   refreash();
 })
 onUnmounted(() => {
-  store.commit('setEditMode', 'preview');
+  store.commit('setEditMode', 'edit');
 })
 
 async function refreash(){

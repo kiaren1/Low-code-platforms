@@ -53,7 +53,10 @@ const list = [
   {
     component: 'VButton',
     label: '按钮',
-    propValue: '按钮',
+    propValue: {
+      text: '按钮',
+      type: 'default'
+    },
     icon: 'button',
     style: {
       width: 100,

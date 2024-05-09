@@ -13,26 +13,26 @@ const funcs = {
 }
 
 function calculateLeftTop(style, curPositon, proportion, needLockProportion, pointInfo) {
-  const { symmetricPoint } = pointInfo
-  let newCenterPoint = getCenterPoint(curPositon, symmetricPoint)
-  let newTopLeftPoint = calculateRotatedPointCoordinate(curPositon, newCenterPoint, -style.rotate)
-  let newBottomRightPoint = calculateRotatedPointCoordinate(symmetricPoint, newCenterPoint, -style.rotate)
+  const { symmetricPoint } = pointInfo;
+  // 这里的反旋转rotate可以视为正旋转了-rotate角度，以此计算原始坐标
+  let newCenterPoint = getCenterPoint(curPositon, symmetricPoint);
+  let newTopLeftPoint = calculateRotatedPointCoordinate(curPositon, newCenterPoint, -style.rotate);
+  let newBottomRightPoint = calculateRotatedPointCoordinate(symmetricPoint, newCenterPoint, -style.rotate);
 
   let newWidth = newBottomRightPoint.x - newTopLeftPoint.x
   let newHeight = newBottomRightPoint.y - newTopLeftPoint.y
 
+  // 处理Group缩放
   if (needLockProportion) {
+    // 修正左上角顶点
     if (newWidth / newHeight > proportion) {
-      newTopLeftPoint.x += Math.abs(newWidth - newHeight * proportion)
-      newWidth = newHeight * proportion
+      newTopLeftPoint.x += Math.abs(newWidth - newHeight * proportion);
+      newWidth = newHeight * proportion;
     } else {
-      newTopLeftPoint.y += Math.abs(newHeight - newWidth / proportion)
-      newHeight = newWidth / proportion
+      newTopLeftPoint.y += Math.abs(newHeight - newWidth / proportion);
+      newHeight = newWidth / proportion;
     }
-
-    // 由于现在求的未旋转前的坐标是以没按比例缩减宽高前的坐标来计算的
-    // 所以缩减宽高后，需要按照原来的中心点旋转回去，获得缩减宽高并旋转后对应的坐标
-    // 然后以这个坐标和对称点获得新的中心点，并重新计算未旋转前的坐标
+    // 由于newTopLeftPoint发生改变，需要重新计算
     const rotatedTopLeftPoint = calculateRotatedPointCoordinate(newTopLeftPoint, newCenterPoint, style.rotate)
     newCenterPoint = getCenterPoint(rotatedTopLeftPoint, symmetricPoint)
     newTopLeftPoint = calculateRotatedPointCoordinate(rotatedTopLeftPoint, newCenterPoint, -style.rotate)
