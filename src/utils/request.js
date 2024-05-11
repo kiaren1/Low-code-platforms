@@ -28,7 +28,7 @@ request.interceptors.request.use((config) => {
   // response 错误处理
   message.destroy();
   message.error({
-    content: '请求异常',
+    content: '网络异常',
     duration: 2,
   })
   return Promise.reject(error);
@@ -53,7 +53,7 @@ request.interceptors.response.use((response) => {
   // response 错误处理
   message.destroy();
   message.error({
-    content: '请求异常',
+    content: '网络异常',
     duration: 4,
   })
   return Promise.reject(error);
@@ -142,4 +142,53 @@ export function requestWarpper(options, obj, key, responseType = 'object') {
   return function cancelRequest() {
     clearInterval(timer)
   }
+}
+
+// 用于重试的代码，getterFn请放入个Promise生成器
+/**
+ * @param {Number} limit 重试次数
+ * @param {Function} getterFn 请求函数，一个promise生成器
+ * @param {Function(err)} rejconditionFn 拒绝函数
+ * 
+ * 示例：const user = await reTryRequest(4, 
+        () => request.get(APIS.Switch),
+        (err) => {
+          const errRes = err.message;
+          if(errRes.data && errRes.data.code === 401){
+            return true;
+          }
+          return false;
+        } 
+      );
+ *
+*/
+export async function reTryRequest(limit, getterFn, rejconditionFn){
+  const switchLoader = (onError) => {
+    const promise= getterFn();
+    return promise.catch((err) => {
+      return new Promise((resolve,reject) => {
+        const retry = () => resolve(switchLoader(onError));
+        const fail = () => reject(err);
+        onError(retry, fail, err);
+      });
+    });
+  }
+
+  let timecounter = 0;
+  const ans = await switchLoader((retry,fail,err) => {
+    if(rejconditionFn(err)){// 如果满足拒绝条件就直接拒绝了
+      fail();
+    } else {
+      // 失败重新发送请求
+      if(timecounter < limit){
+        timecounter++;
+        setTimeout(() => {
+          retry();
+        },Math.pow(timecounter,2)*500);
+      }else {
+        fail();
+      }
+    }
+  });
+  return ans;
 }

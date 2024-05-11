@@ -1,4 +1,5 @@
 import request from '@utils/request.js';
+import { reTryRequest } from '@utils/request.js'
 import store from '@store'
 const APIS = {
   Login: '/api/user/login',
@@ -17,7 +18,16 @@ export default {
     return user;
   },
   async switch() {
-    const user = await request.get(APIS.Switch);
+    const user = await reTryRequest(4, 
+      () => request.get(APIS.Switch),
+      (err) => {
+        const errRes = err.message;
+        if(errRes.data && errRes.data.code === 401){
+          return true;
+        }
+        return false;
+      } 
+    );
     if (user) {
       store.commit('setUser', user);
     }

@@ -150,7 +150,7 @@ const props = defineProps({
 });
 const {size, innerColor, outerColor} = toRefs(props);
 
-const cssVars = computed(()=>({
+const cssVars = computed(() => ({
   '--cubeSize': `${size.value}`,
   '--innerColor': `${innerColor.value || '#6588aa'}`,
   '--outerColor': `${outerColor.value || '#6588aa2d'}`
