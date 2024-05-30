@@ -46,7 +46,7 @@ function closeFsa(){
 }
 
 onMounted(() => {
-  UserApi.switch();
+  if(localStorage.getItem('token')) {UserApi.switch();}
 })
 
 // 记录下最近浏览的项目key，下次打开的时候拉这个
