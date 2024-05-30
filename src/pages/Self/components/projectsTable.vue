@@ -161,6 +161,7 @@ const basePath = computed(() => {
 });
 
 async function handlePublish(projectId){
+  loading.value = true;
   await projectManagement.publish({
     key: projectId
   });
@@ -168,6 +169,7 @@ async function handlePublish(projectId){
   eventBus.emit('refreash');
 }
 async function handleUnPublish(projectId){
+  loading.value = true;
   await projectManagement.unPublish(projectId);
   message.success('下架成功');
   eventBus.emit('refreash');

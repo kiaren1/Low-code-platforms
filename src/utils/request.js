@@ -7,7 +7,8 @@ import store from '@store';
 axios.defaults.withCredentials = true;
 
 const request = axios.create({
-  baseURL: import.meta.env.PROD ? 'http://42.193.126.123:8211' : 'http://localhost:8211',
+  // baseURL: import.meta.env.PROD ? 'http://42.193.126.123:8211' : 'http://localhost:8211',
+  baseURL: 'http://42.193.126.123:8211',
   withCredentials: true
 });
 

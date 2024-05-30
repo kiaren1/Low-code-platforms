@@ -28,6 +28,13 @@ export function insertTextAtCaret(text) {
   }
 }
 
-export function compressImage(file) {
-  return imageConversion.compressAccurately(file, 80);
+export async function compressImage(file) {
+  const compressdImg = await imageConversion.compressAccurately(file, 50);
+  return compressdImg;
+}
+export async function compressDataUrl(dataUrl){
+  const file = await imageConversion.dataURLtoFile(dataUrl);
+  const compressdFile = await compressImage(file);
+  const ans = await imageConversion.filetoDataURL(compressdFile);
+  return ans;
 }

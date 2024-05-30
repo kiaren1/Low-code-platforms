@@ -43,6 +43,7 @@ import { cloneDeep } from 'lodash';
 import { computed, onMounted, reactive, ref, toRefs, watch } from 'vue';
 import projectManagement from '@api/projectManagement.js';
 import { message } from 'ant-design-vue';
+import { compressDataUrl } from '@/utils/utils.js';
 
 const store = useStore();
 const emits = defineEmits(['close', 'update:show']);
@@ -149,8 +150,11 @@ async function htmlToImage() {
 }
 
 async function handleSubmit(){
+  message.info('保存中', 5000);
   try{
-    const previewPicDataUrl = await htmlToImage();
+    const dataUrl = await htmlToImage();
+    const previewPicDataUrl = await compressDataUrl(dataUrl);
+
     switch (savePreviewMode.value){
       case 'save':{ // 保存，可能是有key的更新，也可能是无key新建
         let newProjectData = null;
@@ -173,6 +177,7 @@ async function handleSubmit(){
           name: newProjectData.name,
           status: newProjectData.status
         });
+        message.destroy();
         message.success('保存成功');
         break;
       }
