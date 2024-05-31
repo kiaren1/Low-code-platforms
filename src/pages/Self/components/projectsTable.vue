@@ -17,7 +17,7 @@
         </template>
         <template v-if="column.key === 'path'">
           <router-link :to="`/works?projectId=${record.projectId}`">
-            {{ `${basePath}/works?projectId=${record.projectId}` }}
+            {{ `${basePath}/#/works?projectId=${record.projectId}` }}
           </router-link>
         </template>
         <template v-else-if="column.key === 'action'">
