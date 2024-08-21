@@ -16,7 +16,7 @@
     <article class="author">
       <section>By: Kiaren(刘俊豪)</section>
       <nav>
-        <a href="https://github.com/XiaMingYu77/LowCodeWebPage" target="_blank">
+        <a href="https://github.com/kiaren1/Low-code-platforms" target="_blank">
           <svg class="icon" aria-hidden="true" font-size="25px">
             <use xlink:href="#icon-githublogo"></use>
           </svg>
